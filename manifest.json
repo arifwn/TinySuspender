@@ -1,0 +1,48 @@
+{
+  "manifest_version": 2,
+
+  "name": "Tiny Suspender",
+  "author": "Arif Widi Nugroho",
+  "short_name": "Tiny Suspender",
+  "description": "Unload idle tabs to reduce memory and cpu usage.",
+  "version": "0.1.0",
+
+  "browser_action": {
+    "default_title": "Tiny Suspender",
+    "default_icon": "img/icon-64.png",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": ["js/background.js"],
+    "persistent": false
+  },
+  "content_scripts": [{
+    "matches": ["*://*/*"],
+    "js": [
+      "js/suspender.js",
+      "js/content.js"
+    ]
+  }],
+  "web_accessible_resources": [
+    "suspend.html",
+    "popup.html",
+    "css/*",
+    "js/*",
+    "img/*"
+  ],
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "contextMenus",
+    "history",
+    "storage",
+    "chrome://favicon/*"
+  ],
+  "icons": {
+    "16": "img/icon-16.png",
+    "48": "img/icon-48.png",
+    "64": "img/icon-64.png",
+    "128": "img/icon-128.png",
+    "256": "img/icon-256.png"
+  }
+} 
