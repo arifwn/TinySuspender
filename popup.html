@@ -6,15 +6,18 @@
 </head>
 <body>
   <div class="buttons">
+    <a href="javascript:void(0)" class="info-btn"></a>
     <a href="javascript:void(0)" class="suspend-btn">Suspend This Tab</a>
     <a href="javascript:void(0)" class="suspend-all-btn">Suspend All Tabs</a>
-    <a href="javascript:void(0)" class="suspend-others-btn">Suspend All Tabs Except This One</a>
+    <a href="javascript:void(0)" class="suspend-others-btn">Suspend Other Tabs</a>
     <hr>
     <a href="javascript:void(0)" class="restore-btn">Restore Tab</a>
     <a href="javascript:void(0)" class="restore-all-btn">Restore All Suspended Tabs</a>
     <hr>
+    <a href="javascript:void(0)" class="settings-btn">Settings</a>
+    <hr>
     <form id="config">
-      <label>Automatically suspend backgroud tabs (minutes):</label>
+      <label>Automatically suspend backgroud tabs after (minutes):</label>
       <input type="number" value="" min="0" name="idle_time">
       <small>Set to 0 to disable automatic suspend.</small>
     </form>

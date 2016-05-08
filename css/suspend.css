@@ -21,6 +21,15 @@ body {
   display: inline-block;
   text-decoration: none;
   color: #555;
+  font-size: 26px;
+}
+
+.title .url {
+  display: block;
+  margin: 10px;
+  text-decoration: none;
+  color: #555;
+  font-size: 12px;
 }
 
 .suspend-message {

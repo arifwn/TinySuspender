@@ -26,6 +26,7 @@
   "web_accessible_resources": [
     "suspend.html",
     "popup.html",
+    "settings.html",
     "css/*",
     "js/*",
     "img/*"

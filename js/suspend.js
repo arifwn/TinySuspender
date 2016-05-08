@@ -16,6 +16,8 @@
 
     if (params.uri) {
       document.querySelector('.title .description').setAttribute('href', params.uri);
+      document.querySelector('.title .url').setAttribute('href', params.uri);
+      document.querySelector('.title .url').textContent = params.uri;
 
       var icon = document.createElement('img');
       icon.setAttribute('src', 'chrome://favicon/' + params.uri);

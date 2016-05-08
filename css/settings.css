@@ -1,0 +1,63 @@
+
+body {
+  padding: 0;
+  margin: 0;
+  color: #555;
+  background: beige;
+}
+
+.header {
+  width: 600px;
+  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  min-height: 50px;
+  font-size: 24px;
+  background: url(../img/icon-48.png) no-repeat;
+  padding-left: 58px;
+  box-sizing: border-box;
+}
+
+.container {
+  width: 600px;
+  margin: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 10px;
+  box-shadow: 0 0 5px #555;
+  box-sizing: border-box;
+  background: white;
+}
+
+form {
+  position: relative;
+}
+
+form label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+form input[type=number] {
+  display: block;
+  margin-bottom: 5px;
+}
+
+form textarea {
+  display: block;
+  margin-bottom: 5px;
+  width: 575px;
+  height: 150px;
+}
+
+form small {
+  display: block;
+  margin-bottom: 20px;
+}
+
+#message {
+  display: inline-block;
+  margin-left: 5px;
+}

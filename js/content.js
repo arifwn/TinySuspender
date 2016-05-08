@@ -5,20 +5,58 @@
   if (!root.TS) {
     TS = root.TS = {};
   }
+
+  var whitelist = TS.whitelist = [];
   
+  var _suspender = null;
+  var getSuspender = TS.getSuspender = function () {
+    if (!_suspender) {
+      _suspender = new TS.Suspender(window.location.toString(), document.title, TS.whitelist);
+    }
+    return _suspender;
+  }
+
+  var getWhitelist = TS.getWhitelist = function () {
+    chrome.storage.sync.get('whitelist', function (items) {
+      root.items = items;
+      if (items.whitelist) {
+        var list = items.whitelist.split("\n");
+        TS.whitelist.length = 0;
+
+        for (var i = 0; i < list.length; i++) {
+          var line = list[i];
+          line = line.trim();
+          if (line) {
+            TS.whitelist.push(line);
+          }
+        }
+      }
+    });
+  };
+
+  getWhitelist();
 
   var suspendCommand = TS.suspendCommand = function () {
-    console.log('suspend tab');
-    var suspender = new TS.Suspender(window.location.toString(), document.title);
+    // console.log('suspend tab');
+    var suspender = getSuspender();
 
     if (suspender.isSuspendable()) {
       suspender.suspend();
     }
   };
 
+  var autoSuspendCommand = TS.suspendCommand = function () {
+    // console.log('suspend tab');
+    var suspender = getSuspender();
+
+    if (suspender.isAutoSuspendable()) {
+      suspender.suspend();
+    }
+  };
+
   var restoreCommand = TS.restoreCommand = function () {
-    console.log('restore tab');
-    var suspender = new TS.Suspender(window.location.toString(), document.title);
+    // console.log('restore tab');
+    var suspender = getSuspender();
 
     if (suspender.isSuspended()) {
       suspender.restore();
@@ -34,12 +72,23 @@
       if (msg.command === 'ts_restore_tab') {
         restoreCommand();
       }
+
+      if (msg.command === 'ts_status') {
+        var suspender = getSuspender();
+        var response = {
+          isSuspendable: suspender.isSuspendable(),
+          isAutoSuspendable: suspender.isAutoSuspendable(),
+          notSuspendableReason: suspender.notSuspendableReason()
+        };
+
+        sendResponse(response);
+      }
   });
 
 
-  var timer = null;
-  var idleTimeMinutes = 30;
-  var idleTime = idleTimeMinutes * 60 * 1000;
+  TS.timer = null;
+  TS.idleTimeMinutes = 30;
+  TS.idleTime = TS.idleTimeMinutes * 60 * 1000;
 
   var startIdleTimer = function () {
     if (!document.hidden) {
@@ -47,29 +96,30 @@
     }
 
     chrome.storage.sync.get('idleTimeMinutes', function (items) {
-      idleTimeMinutes = items.idleTimeMinutes;
-      if (!idleTimeMinutes) {
-        idleTimeMinutes = 30;
+      TS.idleTimeMinutes = items.idleTimeMinutes;
+      if (!TS.idleTimeMinutes) {
+        TS.idleTimeMinutes = 30;
       }
-      idleTime = idleTimeMinutes * 60 * 1000;
+      TS.idleTime = TS.idleTimeMinutes * 60 * 1000;
 
-      timer = setTimeout(function () {
+      TS.timer = setTimeout(function () {
         suspendCommand();
-      }, idleTime);
-      console.log('Tab hidden. Will suspend in ' + (idleTime / 1000) + ' seconds');
+      }, TS.idleTime);
+      console.log('Tab hidden. Will suspend in ' + (TS.idleTime / 1000) + ' seconds');
     });
   };
 
   document.addEventListener('visibilitychange', function() {
     if (document.hidden) {
-      if (!idleTime) {
+      if (!TS.idleTime) {
         return;
       }
       startIdleTimer();
     }
     else {
       console.log('Tab shown. Cancelling suspend timer.');
-      clearTimeout(timer);
+      clearTimeout(TS.timer);
+      TS.timer = null;
     }
   });
 
@@ -77,9 +127,16 @@
     for (var key in changes) {
       var storageChange = changes[key];
       if (key == 'idleTimeMinutes') {
-        console.log('Setting changed. Resetting suspend timer.');
-        clearTimeout(timer);
-        startIdleTimer();
+        console.log('Setting changed.');
+        clearTimeout(TS.timer);
+        TS.timer = null;
+        if (document.hidden) {
+          console.log('Resetting suspend timer.');
+          startIdleTimer();
+        }
+      }
+      if (key == 'whitelist') {
+        getWhitelist();
       }
     }
   });

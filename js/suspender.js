@@ -30,14 +30,31 @@
     return hashParams;
   }
 
+
+  var isUrlMatch = function (pattern, url) {
+    if (url.startsWith(pattern)) {
+      return true;
+    }
+
+    return false;
+  };
+
+
   var Suspender = TS.Suspender = class {
-    constructor(url, title) {
+    constructor(url, title, whitelist) {
       this.url = url;
       this.title = title;
+
+      if (!whitelist) {
+        whitelist = [];
+      }
+
+      this.whitelist = whitelist;
+      this._notSuspendableReason = null;
     }
 
     isSuspended() {
-      if (this.url.startsWith(chrome.extension.getURL('suspend.html'))) {
+      if (isUrlMatch(chrome.extension.getURL('suspend.html'), this.url)) {
         return true;
       }
 
@@ -45,20 +62,77 @@
     }
 
     isSuspendable() {
-      if (this.url.startsWith('chrome-extension://')) {
+      this._notSuspendableReason = null;
+
+      if (this.url.startsWith(chrome.extension.getURL('suspend.html'))) {
+        this._notSuspendableReason = 'already_suspended';
         return false;
+      }
+
+      var systemPages = [
+        '/^chrome-extension*/',
+        '/^chrome*/',
+        '/\/chrome\/newtab/'
+      ];
+
+      for (var i = 0; i < systemPages.length; i++) {
+        var pattern = systemPages[i];
+        if (this.isMatch(pattern, this.url)) {
+          this._notSuspendableReason = 'system_page';
+          return false;
+        }
       }
 
       return true;
     }
 
+    isMatch(pattern, string) {
+      var isRegex = false;
+      if ((pattern.length > 2) && (pattern.charAt(0) == '/') && (pattern.charAt(pattern.length-1) == '/')) {
+        pattern = pattern.substr(1, pattern.length-2);
+        isRegex = true;
+      }
+
+      if (!isRegex) {
+        if (string.startsWith(pattern)) {
+          return true;
+        }
+      }
+      else {
+        var re = new RegExp(pattern);
+        if (re.exec(string)) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     isAutoSuspendable() {
-      return true;
+      this._notSuspendableReason = null;
+
+      var focusEl = document.activeElement;
+
+      if (focusEl && (focusEl.tagName == 'INPUT' || focusEl.tagName == 'TEXTAREA')) {
+        this._notSuspendableReason = 'receiving_input';
+        return false;
+      }
+
+      for (var i = 0; i < this.whitelist.length; i++) {
+        var pattern = this.whitelist[i];
+        if (this.isMatch(pattern, this.url)) {
+          this._notSuspendableReason = 'whitelisted';
+          return false;
+        }
+      }
+
+      return this.isSuspendable();
     }
 
     notSuspendableReason() {
-      // null, 'active_input', 'system_page'
-      return null;
+      // null, 'receiving_input', 'system_page', 'whitelisted', 'already_suspended'
+      // 'receiving_input': still suspendable, but not autosuspendable
+      return this._notSuspendableReason;
     }
 
     suspend() {
