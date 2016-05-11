@@ -45,7 +45,7 @@
     }
   };
 
-  var autoSuspendCommand = TS.suspendCommand = function () {
+  var autoSuspendCommand = TS.autoSuspendCommand = function () {
     // console.log('suspend tab');
     var suspender = getSuspender();
 
@@ -103,7 +103,7 @@
       TS.idleTime = TS.idleTimeMinutes * 60 * 1000;
 
       TS.timer = setTimeout(function () {
-        suspendCommand();
+        autoSuspendCommand();
       }, TS.idleTime);
       console.log('Tab hidden. Will suspend in ' + (TS.idleTime / 1000) + ' seconds');
     });
