@@ -105,11 +105,11 @@
       TS.timer = setTimeout(function () {
         autoSuspendCommand();
       }, TS.idleTime);
-      console.log('Tab hidden. Will suspend in ' + (TS.idleTime / 1000) + ' seconds');
+      // console.log('Tab hidden. Will suspend in ' + (TS.idleTime / 1000) + ' seconds');
     });
   };
 
-  document.addEventListener('visibilitychange', function() {
+  var doVisibilityEventListener = function () {
     if (document.hidden) {
       if (!TS.idleTime) {
         return;
@@ -117,11 +117,17 @@
       startIdleTimer();
     }
     else {
-      console.log('Tab shown. Cancelling suspend timer.');
+      // console.log('Tab shown. Cancelling suspend timer.');
       clearTimeout(TS.timer);
       TS.timer = null;
     }
+  };
+
+  document.addEventListener('visibilitychange', function() {
+    doVisibilityEventListener();
   });
+
+  doVisibilityEventListener();
 
   chrome.storage.onChanged.addListener(function(changes, namespace) {
     for (var key in changes) {
