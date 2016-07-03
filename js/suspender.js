@@ -143,7 +143,6 @@
     restore() {
       var params = getHashParams(this.url);
       if (params.uri) {
-        chrome.history.deleteUrl({url: window.location.toString() });
         window.location = params.uri;
       }
     }
