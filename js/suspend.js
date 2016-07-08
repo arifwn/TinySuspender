@@ -7,7 +7,6 @@
   }
 
   var init = function () {
-    chrome.history.deleteUrl({url: window.location.toString() });
 
     var params = null;
     if (window.location.hash) {
