@@ -1,0 +1,28 @@
+{
+  "name": "tiny-suspender",
+  "version": "0.2.0",
+  "description": "Unload / suspend / hibernate idle tabs to reduce memory and cpu usage.",
+  "main": "index.js",
+  "private": true,
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arifwn/TinySuspender.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arifwn/TinySuspender/issues"
+  },
+  "homepage": "https://github.com/arifwn/TinySuspender#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  }
+}
