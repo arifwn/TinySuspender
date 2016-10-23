@@ -6,21 +6,41 @@
 </head>
 <body>
   <div class="buttons">
-    <a href="javascript:void(0)" class="info-btn"></a>
-    <a href="javascript:void(0)" class="suspend-btn">Suspend This Tab</a>
-    <a href="javascript:void(0)" class="suspend-all-btn">Suspend All Tabs</a>
-    <a href="javascript:void(0)" class="suspend-others-btn">Suspend Other Tabs</a>
-    <hr>
-    <a href="javascript:void(0)" class="restore-btn">Restore Tab</a>
-    <a href="javascript:void(0)" class="restore-all-btn">Restore All Suspended Tabs</a>
-    <hr>
-    <a href="javascript:void(0)" class="settings-btn">Settings</a>
-    <hr>
-    <form id="config">
-      <label>Automatically suspend backgroud tabs after (minutes):</label>
-      <input type="number" value="" min="0" name="idle_time">
-      <small>Set to 0 to disable automatic suspend.</small>
-    </form>
+    <div id="status_container" class="section">
+      <div id="status_text">Obtaining tab status...</div>
+    </div>
+
+    <div id="suspension_commands" class="section">
+      <a href="javascript:void(0)" class="suspend-btn">Suspend This Tab</a>
+      <a href="javascript:void(0)" class="suspend-all-btn">Suspend All Tabs</a>
+      <a href="javascript:void(0)" class="suspend-others-btn">Suspend Other Tabs</a>
+    </div>
+
+    <div id="restore_commands" class="section">
+      <a href="javascript:void(0)" class="restore-btn">Restore Tab</a>
+      <a href="javascript:void(0)" class="restore-all-btn">Restore All Suspended Tabs</a>
+    </div>
+
+    <div id="auto_suspension_commands" class="section">
+      <a href="javascript:void(0)" class="temporary-disable-auto-suspend-btn">Disable automatic suspension for an hour</a>
+      <a href="javascript:void(0)" class="enable-auto-suspend-btn">Enable automatic suspension</a>
+      <a href="javascript:void(0)" class="disable-tab-auto-suspend-btn">Disable automatic suspension on this tab</a>
+      <a href="javascript:void(0)" class="enable-tab-auto-suspend-btn">Enable automatic suspension on this tab</a>
+    </div>
+
+    <div id="whitelisting_commands" class="section">
+      <a href="javascript:void(0)" class="add-to-whitelist-btn">Add current page to whitelist</a>
+    </div>
+
+    <div id="settings_commands" class="section">
+      <a href="javascript:void(0)" class="settings-btn">Settings</a>
+      <hr>
+      <form id="config">
+        <label>Automatically suspend backgroud tabs after (minutes):</label>
+        <input type="number" value="" min="0" name="idle_time">
+        <small>Set to 0 to disable automatic suspend.</small>
+      </form>
+    </div>
   </div>
 
   <script type="text/javascript" src="js/popup.js"></script>

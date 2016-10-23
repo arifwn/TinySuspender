@@ -1,5 +1,6 @@
 body {
-	min-width: 250px;
+  min-width: 300px;
+  font-family: 'Helvetica Neue', 'Lucida Grande', sans-serif;
 }
 
 .buttons a {
@@ -11,10 +12,28 @@ body {
   font-size: 14px;
 }
 
-.buttons a:focus,
+.buttons a:focus {
+  outline: none;
+  background: #eaeaea;
+}
+
 .buttons a:hover {
   outline: none;
   background: #dedede;
+}
+
+.section {
+  border-bottom: solid 1px #999;
+}
+.section:last-of-type {
+  border-bottom: none;
+}
+
+#status_text {
+  padding: 5px;
+  margin: 5px;
+  background: #dedede;
+  color: #555;
 }
 
 form {
