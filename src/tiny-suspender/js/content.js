@@ -22,7 +22,6 @@ class TinySuspenderContent {
     if (request.command && request.command.startsWith('ts_')) {
       let command = request.command.substr(3);
       if (this[command]) {
-        this.log('calling', command, request, sender);
         return (this[command])(request, sender, sendResponse);
       }
     }
@@ -32,11 +31,9 @@ class TinySuspenderContent {
 
   get_tab_state(request, sender, sendResponse) {
     if (document.querySelector('body').getAttribute('data-suspended') === 'true' ) {
-      this.log({state: 'suspended:suspended'});
       sendResponse({state: 'suspended:suspended'});
     }
     else {
-      this.log({state: 'suspendable:auto'});
       sendResponse({state: 'suspendable:auto'});
     }
   }

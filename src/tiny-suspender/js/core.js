@@ -16,6 +16,27 @@ class TinySuspenderCore {
       console.log(...arguments);
   }
 
+  saveState() {
+    this.chrome.storage.sync.set({'tabState': this.tabState}, () => {
+      this.log('state saved');
+    });
+  }
+
+  loadState() {
+    this.chrome.storage.sync.get(['tabState'], (items) => {
+      var tabState = items.tabState;
+      if (!tabState) {
+        this.tabState = {};
+      }
+      else {
+        this.tabState = tabState;
+      }
+
+      this.trimState();
+      this.log('state loaded', this.tabState);
+    });
+  }
+
   trimState() {
     this.chrome.tabs.query({}, (tabs) => {
       let tabIds = {};
@@ -36,6 +57,11 @@ class TinySuspenderCore {
   setChrome(chrome) {
     this.chrome = chrome;
     this.chrome.runtime.onMessage.addListener(this.eventHandler.bind(this));
+    this.loadState();
+    this.chrome.runtime.onSuspend.addListener(this.saveState.bind(this));
+
+    this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
+    this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
   }
 
   setIconState(state, tabId) {
@@ -70,7 +96,124 @@ class TinySuspenderCore {
     this.chrome.browserAction.setIcon(param);
   }
 
+  setIconFromStateString(state, tabId) {
+    if (state === 'suspended:suspended') {
+      this.setIconState('normal', tabId);
+    }
+    else if (state === 'suspendable:auto') {
+      this.setIconState('green', tabId);
+    }
+    else if (state === 'suspendable:form_changed') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'suspendable:tab_whitelist') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'suspendable:tab_whitelist') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'nonsuspenable:temporary_disabled') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'nonsuspenable:system_page') {
+      this.setIconState('gray', tabId);
+    }
+    else if (state === 'nonsuspenable:not_running') {
+      this.setIconState('red', tabId);
+    }
+    else if (state === 'nonsuspenable:error') {
+      this.setIconState('red', tabId);
+    }
+    else {
+      this.setIconState('red', tabId);
+    }
+  }
+
+  getTabState(tabId) {
+    let promise = new Promise((resolve, reject) => {
+      this.chrome.tabs.get(tabId, (tab) => {
+        let url = new URL(tab.url);
+
+        if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
+          resolve({state: 'suspended:suspended'});
+          return;
+        }
+
+        if (url && url.protocol === 'chrome-extension:') {
+          resolve({state: 'nonsuspenable:system_page'});
+          return;
+        }
+
+        if (url && url.protocol === 'chrome:') {
+          resolve({state: 'nonsuspenable:system_page'});
+          return;
+        }
+
+        let answered = false;
+
+        // if content script did not answer within 2 seconds, return state as nonsuspenable:not_running
+        let timer = setTimeout(() => {
+          if (!answered) {
+            resolve({state: 'nonsuspenable:not_running'});
+          }
+        }, 5000);
+
+        // ask content script for current state
+        this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_state'}, (response) => {
+          let state;
+
+          if (response && response.state == 'suspended:suspended') {
+            state = response.state;
+          }
+          else if (response && response.state == 'suspendable:auto') {
+            // check this.tabState and whitelist to determine final state
+            let storedState = this.tabState[tabId];
+            state = response.state;
+
+            if (storedState) {
+              state = storedState.state;
+            }
+
+            // TODO: check whitelist
+
+          }
+          else {
+            state = 'nonsuspenable:not_running';
+          }
+
+          answered = true;
+          clearTimeout(timer);
+          resolve({state: state});
+        });
+
+      });
+
+    });
+    return promise;
+  }
+
   // event handlers:
+
+  onTabUpdated(tabId, changeInfo, tab) {
+    this.getTabState(tabId)
+      .then((state) => {
+        this.setIconFromStateString(state.state, tabId);
+      })
+      .catch((error) => {
+
+      });
+  }
+
+  onTabActivated(activeInfo) {
+    let tabId = activeInfo.tabId;
+    this.getTabState(tabId)
+      .then((state) => {
+        this.setIconFromStateString(state.state, tabId);
+      })
+      .catch((error) => {
+
+      });
+  }
 
   suspend_tab(request, sender, sendResponse) {
     this.log('suspend_tab');
@@ -128,48 +271,13 @@ class TinySuspenderCore {
 
   get_tab_state(request, sender, sendResponse) {
     if (request.tabId) {
-      // check tab url; if system page, return nonsuspenable:system_page
+      this.getTabState(request.tabId)
+      .then((state) => {
+        sendResponse(state);
+      })
+      .catch((error) => {
 
-      let answered = false;
-
-      // if content script did not answer within 2 seconds, return state as nonsuspenable:not_running
-      let timer = setTimeout(() => {
-        if (!answered) {
-          this.log('nonsuspenable:not_running');
-          sendResponse({state: 'nonsuspenable:not_running'});
-        }
-      }, 2000);
-
-      // ask content script for current state
-      this.chrome.tabs.sendMessage(request.tabId, {command: 'ts_get_tab_state'}, (response) => {
-        if (response && response.state == 'suspended:suspended') {
-          answered = true;
-          clearTimeout(timer);
-          sendResponse({state: 'suspended:suspended'});
-        }
-        else if (response && response.state == 'suspendable:auto') {
-          // check this.tabState and whitelist to determine final state
-          let state = this.tabState[request.tabId];
-          if (!state) {
-            state = 'suspendable:auto';
-          }
-
-          // TODO: check whitelist
-
-          answered = true;
-          clearTimeout(timer);
-
-          this.log('sending response', state);
-          sendResponse({state: state});
-        }
-        else {
-          this.log(response);
-          answered = true;
-          clearTimeout(timer);
-          sendResponse({state: 'nonsuspenable:error'});
-        }
       });
-
       return true;
     }
   }

@@ -35,12 +35,9 @@ class TinySuspenderPopup {
   }
 
   getTabState() {
-    this.log('getTabState');
-
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
         chrome.runtime.sendMessage({command: "ts_get_tab_state", tabId: tab.id}, (response) => {
-          console.log('getTabState', response);
           this.state = response.state;
           this.updateStatusTextFromState(response.state);
         });
@@ -61,6 +58,9 @@ class TinySuspenderPopup {
     }
     else if (state === 'suspendable:tab_whitelist') {
       statusText = 'This tab will not be suspended automatically for now.';
+    }
+    else if (state === 'suspendable:url_whitelist') {
+      statusText = 'This url is whitelisted and will not be suspended automatically.';
     }
     else if (state === 'nonsuspenable:temporary_disabled') {
       statusText = 'This tab will not be suspended automatically for now.';
@@ -147,7 +147,10 @@ let tsp = new TinySuspenderPopup();
 if (this.chrome) {
   tsp.setChrome(chrome);
   tsp.initEventHandlers();
-  tsp.getTabState();
+  setTimeout(() => {
+    tsp.getTabState();
+  }, 200);
+
 }
 
 try {
