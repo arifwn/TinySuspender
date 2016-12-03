@@ -54,7 +54,7 @@ class TinySuspenderPopup {
       statusText = 'This tab will be suspended automatically.';
     }
     else if (state === 'suspendable:form_changed') {
-      statusText = 'This tab will not be suspended automatically since it contains unsaved form data.';
+      statusText = 'This tab will not be suspended automatically since it may contains unsaved form data.';
     }
     else if (state === 'suspendable:tab_whitelist') {
       statusText = 'This tab will not be suspended automatically for now.';

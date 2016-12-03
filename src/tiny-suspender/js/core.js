@@ -272,6 +272,7 @@ class TinySuspenderCore {
       this.getTabState(request.tabId)
       .then((state) => {
         sendResponse(state);
+        this.setIconFromStateString(state.state, request.tabId);
       })
       .catch((error) => {
 
