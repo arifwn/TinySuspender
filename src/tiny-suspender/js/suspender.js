@@ -1,1 +1,5 @@
-'use strict';
+class TinySuspender {
+  constructor() {
+    
+  }
+}

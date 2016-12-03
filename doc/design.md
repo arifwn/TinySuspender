@@ -69,6 +69,8 @@ Suspender's State
     - `url_whitelist`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
 - `nonsuspenable`
+    - `temporary_disabled`: The user temporarily disable automatic tab suspension 
+       for this tab
     - `system_page`: Red icon. system page cannot be suspended
     - `not_running`: Red icon. content script is not running. Suspension is not 
        possible

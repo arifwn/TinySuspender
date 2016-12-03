@@ -13,13 +13,14 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": ["js/core.js"],
+    "scripts": [
+      "js/core.js"
+    ],
     "persistent": false
   },
   "content_scripts": [{
     "matches": ["*://*/*"],
     "js": [
-      "js/suspender.js",
       "js/content.js"
     ]
   }],
