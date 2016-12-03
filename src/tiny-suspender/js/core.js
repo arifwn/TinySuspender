@@ -156,30 +156,25 @@ class TinySuspenderCore {
           if (!answered) {
             resolve({state: 'nonsuspenable:not_running'});
           }
-        }, 5000);
+        }, 2000);
 
         // ask content script for current state
+        // Content script may prevent autosuspension if the user has unsaved form data
         this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_state'}, (response) => {
-          let state;
+          let state = 'suspendable:auto';
 
-          if (response && response.state == 'suspended:suspended') {
+          if (response && response.state) {
             state = response.state;
           }
-          else if (response && response.state == 'suspendable:auto') {
-            // check this.tabState and whitelist to determine final state
-            let storedState = this.tabState[tabId];
-            state = response.state;
 
-            if (storedState) {
-              state = storedState.state;
-            }
+          // check this.tabState and whitelist to determine final state
+          let storedState = this.tabState[tabId];
 
-            // TODO: check whitelist
-
+          if (storedState && (state != 'suspendable:form_changed')) {
+            state = storedState.state;
           }
-          else {
-            state = 'nonsuspenable:not_running';
-          }
+
+          // TODO: check whitelist
 
           answered = true;
           clearTimeout(timer);
@@ -218,7 +213,10 @@ class TinySuspenderCore {
   suspend_tab(request, sender, sendResponse) {
     this.log('suspend_tab');
     if (request.tabId) {
-      this.chrome.tabs.sendMessage(request.tabId, {command: 'ts_suspend_tab'});
+      this.chrome.tabs.get(request.tabId, (tab) => {
+        chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)})
+      });
+
     }
   }
 

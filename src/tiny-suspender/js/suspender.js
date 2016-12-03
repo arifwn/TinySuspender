@@ -1,5 +1,0 @@
-class TinySuspender {
-  constructor() {
-    
-  }
-}

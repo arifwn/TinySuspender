@@ -34,6 +34,7 @@ class TinySuspenderContent {
       sendResponse({state: 'suspended:suspended'});
     }
     else {
+      // TODO: return suspendable:form_changed if there is any unsaved form
       sendResponse({state: 'suspendable:auto'});
     }
   }
