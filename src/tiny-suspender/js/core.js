@@ -65,6 +65,8 @@ class TinySuspenderCore {
 
     this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
+    chrome.runtime.onInstalled.addListener(this.onPluginInstalled.bind(this));
+    this.chrome.contextMenus.onClicked.addListener(this.onContextMenuClickHandler.bind(this));
 
     this.readSettings();
     this.chrome.storage.onChanged.addListener((changes, namespace) => {
@@ -76,16 +78,16 @@ class TinySuspenderCore {
   }
 
   readSettings() {
-    let promise = new Promise((resolve, reject) =>{
+    let promise = new Promise((resolve, reject) => {
       this.chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
         if (isNaN(this.idleTimeMinutes)) {
           this.idleTimeMinutes = 30;
         }
 
+        this.whitelist = [];
         if (items.whitelist) {
           let list = items.whitelist.split("\n");
-          this.whitelist.length = 0;
 
           for (let i = 0; i < list.length; i++) {
             let line = list[i];
@@ -350,6 +352,20 @@ class TinySuspenderCore {
 
   // event handlers:
 
+  onPluginInstalled() {
+    // Create one test item for each context type.
+    var contexts = ["all"];
+    for (var i = 0; i < contexts.length; i++) {
+      var context = contexts[i];
+      var title = "Suspend Tab";
+      var id = chrome.contextMenus.create({
+        "title": title,
+        "contexts":[context],
+        "id": "context" + context
+      });
+    }
+  }
+
   onAlarm(alarm) {
     this.log('timer alarm fired:', alarm);
     let tabId = parseInt(alarm.name);
@@ -357,6 +373,10 @@ class TinySuspenderCore {
 
     this.autoSuspendTab(tabId);
   }
+
+  onContextMenuClickHandler(info, tab) {
+    this.suspendTab(tab.id);
+  };
 
   onTabUpdated(tabId, changeInfo, tab) {
     this.getTabState(tabId)
