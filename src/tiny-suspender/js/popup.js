@@ -45,9 +45,9 @@ class TinySuspenderPopup {
   }
 
   getTabState() {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_get_tab_state", tabId: tab.id}, (response) => {
+        this.chrome.runtime.sendMessage({command: "ts_get_tab_state", tabId: tab.id}, (response) => {
           this.state = response.state;
           this.updateStatusFromState(response.state);
         });

@@ -68,35 +68,38 @@ class TinySuspenderCore {
     this.readSettings();
     this.chrome.storage.onChanged.addListener((changes, namespace) => {
       this.readSettings();
-      this.updateTimers();
+      this.resetAutoSuspensionTimers();
     });
-
+    this.chrome.alarms.onAlarm.addListener(this.onAlarm.bind(this));
+    this.initTimersForBackgroundTabs();
   }
 
   readSettings() {
-    this.chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
-      this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
-      if (isNaN(this.idleTimeMinutes)) {
-        this.idleTimeMinutes = 30;
-      }
+    let promise = new Promise((resolve, reject) =>{
+      this.chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
+        this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
+        if (isNaN(this.idleTimeMinutes)) {
+          this.idleTimeMinutes = 30;
+        }
 
-      if (items.whitelist) {
-        let list = items.whitelist.split("\n");
-        this.whitelist.length = 0;
+        if (items.whitelist) {
+          let list = items.whitelist.split("\n");
+          this.whitelist.length = 0;
 
-        for (let i = 0; i < list.length; i++) {
-          let line = list[i];
-          line = line.trim();
-          if (line) {
-            this.whitelist.push(line);
+          for (let i = 0; i < list.length; i++) {
+            let line = list[i];
+            line = line.trim();
+            if (line) {
+              this.whitelist.push(line);
+            }
           }
         }
-      }
-    });
-  }
 
-  updateTimers() {
-    // update existing timers to reflect the latest settings changes
+        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist});
+      });
+    });
+
+    return promise;
   }
 
   isMatch(pattern, string) {
@@ -263,7 +266,96 @@ class TinySuspenderCore {
     return false;
   }
 
+  isAutoSuspendable(state) {
+    if (state) {
+      if (state === 'suspendable:auto') return true;
+    }
+    return false;
+  }
+
+  cancelTabAutosuspensionTimer(tabId) {
+    this.log('canceling suspension timer for ', tabId)
+    let alarmName = `${tabId}`;
+    this.chrome.alarms.clear(alarmName);
+  }
+
+  createTabAutosuspensionTimer(tabId) {
+    this.log('creating suspension timer for ', tabId)
+    let alarmName = `${tabId}`;
+    chrome.alarms.create(alarmName, {delayInMinutes: this.idleTimeMinutes})
+  }
+
+  initTimersForBackgroundTabs() {
+    console.log('initTimersForBackgroundTabs')
+    this.readSettings()
+      .then((settings) => {
+        if (settings.idleTimeMinutes == 0) return;
+        this.chrome.tabs.query({ active: false }, (tabs) => {
+          tabs.forEach((tab) => {
+            let tabId = tab.id;
+            let alarmName = `${tabId}`;
+            this.getTabState(tabId)
+              .then((state) => {
+                if (this.isAutoSuspendable(state.state)) {
+                  this.chrome.alarms.get(alarmName, (alarm) => {
+                    if (alarm) return;
+                    this.createTabAutosuspensionTimer(tab.id);
+                  });
+                }
+              })
+              .catch((error) => {});
+          });
+        });
+      })
+      .catch((error) => {});
+  }
+
+  resetAutoSuspensionTimers() {
+    this.chrome.tabs.query({}, (tabs) => {
+      tabs.forEach((tab) => {
+        this.cancelTabAutosuspensionTimer(tab.id);
+      });
+      this.initTimersForBackgroundTabs();
+    });
+  }
+
+  suspendTab(tabId) {
+    this.getTabState(tabId)
+      .then((state) => {
+        if (this.isSuspendable(state.state)) {
+          this.chrome.tabs.get(tabId, (tab) => {
+            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+          });
+        }
+      })
+      .catch((error) => {
+
+      });
+  }
+
+  autoSuspendTab(tabId) {
+    this.getTabState(tabId)
+      .then((state) => {
+        if (this.isAutoSuspendable(state.state)) {
+          this.chrome.tabs.get(tabId, (tab) => {
+            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+          });
+        }
+      })
+      .catch((error) => {
+
+      });
+  }
+
   // event handlers:
+
+  onAlarm(alarm) {
+    this.log('timer alarm fired:', alarm);
+    let tabId = parseInt(alarm.name);
+    if (isNaN(tabId)) return;
+
+    this.autoSuspendTab(tabId);
+  }
 
   onTabUpdated(tabId, changeInfo, tab) {
     this.getTabState(tabId)
@@ -284,21 +376,15 @@ class TinySuspenderCore {
       .catch((error) => {
 
       });
+
+    // cancel timer
+    this.cancelTabAutosuspensionTimer(activeInfo.tabId);
+    this.initTimersForBackgroundTabs();
   }
 
   suspend_tab(request, sender, sendResponse) {
     this.log('suspend_tab');
-    this.getTabState(request.tabId)
-      .then((state) => {
-        if (this.isSuspendable(state.state)) {
-          this.chrome.tabs.get(request.tabId, (tab) => {
-            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
-          });
-        }
-      })
-      .catch((error) => {
-
-      });
+    this.suspendTab(request.tabId);
   }
 
   restore_tab(request, sender, sendResponse) {
