@@ -94,8 +94,6 @@ IPC Commands (CORE)
 
 IPC Commands (Content Script)
 -----------------------------
-- `ts_suspend_tab`
-- `ts_restore_tab`
 - `ts_get_tab_state`: answer with `suspendable:auto` or `suspended:suspended`.
   May be overridden by CORE
 

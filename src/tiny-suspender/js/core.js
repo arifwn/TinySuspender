@@ -10,6 +10,7 @@ class TinySuspenderCore {
     this.tabState = {};
 
     this.idleTimeMinutes = 30;
+    this.whitelist = [];
   }
 
   log() {
@@ -67,17 +68,57 @@ class TinySuspenderCore {
     this.readSettings();
     this.chrome.storage.onChanged.addListener((changes, namespace) => {
       this.readSettings();
+      this.updateTimers();
     });
 
   }
 
   readSettings() {
-    this.chrome.storage.sync.get('idleTimeMinutes', (items) => {
+    this.chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
       this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
       if (isNaN(this.idleTimeMinutes)) {
         this.idleTimeMinutes = 30;
       }
+
+      if (items.whitelist) {
+        let list = items.whitelist.split("\n");
+        this.whitelist.length = 0;
+
+        for (let i = 0; i < list.length; i++) {
+          let line = list[i];
+          line = line.trim();
+          if (line) {
+            this.whitelist.push(line);
+          }
+        }
+      }
     });
+  }
+
+  updateTimers() {
+    // update existing timers to reflect the latest settings changes
+  }
+
+  isMatch(pattern, string) {
+    let isRegex = false;
+    if ((pattern.length > 2) && (pattern.charAt(0) == '/') && (pattern.charAt(pattern.length-1) == '/')) {
+      pattern = pattern.substr(1, pattern.length-2);
+      isRegex = true;
+    }
+
+    if (!isRegex) {
+      if (string.startsWith(pattern)) {
+        return true;
+      }
+    }
+    else {
+      let re = new RegExp(pattern);
+      if (re.exec(string)) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   setIconState(state, tabId) {
@@ -193,7 +234,15 @@ class TinySuspenderCore {
             state = storedState.state;
           }
 
-          // TODO: check whitelist
+          // check whitelist
+
+          for (let i = 0; i < this.whitelist.length; i++) {
+            let pattern = this.whitelist[i];
+            if (this.isMatch(pattern, tab.url)) {
+              state = 'suspendable:url_whitelist';
+            }
+          }
+
 
           answered = true;
           clearTimeout(timer);

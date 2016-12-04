@@ -40,7 +40,7 @@ class TinySuspenderPopup {
         this.idleTimeMinutes = 30;
       }
 
-      document.querySelector('#quick_settings_commands input[name=idle_time]').value = this.idleTimeMinutes;
+      document.querySelector('#config input[name=idle_time]').value = this.idleTimeMinutes;
     });
   }
 
@@ -272,12 +272,14 @@ class TinySuspenderPopup {
 
   onSettings(e) {
     this.log('onSettings');
+    window.open(chrome.extension.getURL('settings.html'));
+    window.close();
   }
 
   onQuickSettingsChanged(e) {
     this.log('onQuickSettingsChanged');
 
-    let idleTimeMinutes = parseInt(document.querySelector('#quick_settings_commands input[name=idle_time]').value);
+    let idleTimeMinutes = parseInt(document.querySelector('#config input[name=idle_time]').value);
     if (isNaN(idleTimeMinutes)) return;
 
     this.idleTimeMinutes = idleTimeMinutes;
@@ -291,7 +293,7 @@ class TinySuspenderPopup {
     this.log('onQuickSettingsSubmit');
     e.preventDefault();
 
-    let idleTimeMinutes = parseInt(document.querySelector('#quick_settings_commands input[name=idle_time]').value);
+    let idleTimeMinutes = parseInt(document.querySelector('#config input[name=idle_time]').value);
     if (isNaN(idleTimeMinutes)) return;
 
     this.idleTimeMinutes = idleTimeMinutes;
