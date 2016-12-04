@@ -4,6 +4,28 @@ let pageUrl = suspendUrl.searchParams.get('url');
 let favIconUrl = suspendUrl.searchParams.get('favIconUrl');
 let title = suspendUrl.searchParams.get('title');
 
+// compatibility with previous version
+// will be removed in the next version
+if (!pageUrl) {
+  let suspendUrl = new URL(location.href);
+  let hash = suspendUrl.hash ? suspendUrl.hash.replace('#', '') : '';
+
+  let hashParams = {};
+  let e,
+      a = /\+/g,  // Regex for replacing addition symbol with a space
+      r = /([^&;=]+)=?([^&;]*)/g,
+      d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+      q = hash;
+
+  while (e = r.exec(q))
+     hashParams[d(e[1])] = d(e[2]);
+
+  pageUrl = hashParams.uri;
+  title = hashParams.title;
+}
+// end compatibility section
+
+
 document.onclick = () => {
   location = pageUrl;
 }
@@ -14,6 +36,7 @@ if (pageUrl) {
   document.querySelector('.title .url').setAttribute('href', pageUrl);
   document.querySelector('.title .url').textContent = pageUrl;
 }
+
 
 if (favIconUrl) {
   var icon = document.createElement('img');

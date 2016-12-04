@@ -9,6 +9,7 @@ class TinySuspenderCore {
     // e.g. don't suspend this tab for one hour, don't suspend for now, etc
     this.tabState = {};
 
+    this.idleTimeMinutes = 30;
   }
 
   log() {
@@ -62,6 +63,21 @@ class TinySuspenderCore {
 
     this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
+
+    this.readSettings();
+    this.chrome.storage.onChanged.addListener((changes, namespace) => {
+      this.readSettings();
+    });
+
+  }
+
+  readSettings() {
+    this.chrome.storage.sync.get('idleTimeMinutes', (items) => {
+      this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
+      if (isNaN(this.idleTimeMinutes)) {
+        this.idleTimeMinutes = 30;
+      }
+    });
   }
 
   setIconState(state, tabId) {
@@ -162,6 +178,9 @@ class TinySuspenderCore {
         // Content script may prevent autosuspension if the user has unsaved form data
         this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_state'}, (response) => {
           let state = 'suspendable:auto';
+          if (this.idleTimeMinutes == 0) {
+            state = 'suspendable:auto_disabled';
+          }
 
           if (response && response.state) {
             state = response.state;
@@ -185,6 +204,14 @@ class TinySuspenderCore {
 
     });
     return promise;
+  }
+
+  isSuspendable(state) {
+    if (state && state.split) {
+      let suspendable = state.split(':')[0];
+      if (suspendable === 'suspendable') return true;
+    }
+    return false;
   }
 
   // event handlers:
@@ -212,59 +239,32 @@ class TinySuspenderCore {
 
   suspend_tab(request, sender, sendResponse) {
     this.log('suspend_tab');
-    if (request.tabId) {
-      this.chrome.tabs.get(request.tabId, (tab) => {
-        chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)})
-      });
+    this.getTabState(request.tabId)
+      .then((state) => {
+        if (this.isSuspendable(state.state)) {
+          this.chrome.tabs.get(request.tabId, (tab) => {
+            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+          });
+        }
+      })
+      .catch((error) => {
 
-    }
+      });
   }
 
   restore_tab(request, sender, sendResponse) {
+    this.log('restore_tab');
     if (request.tabId) {
-      this.chrome.tabs.sendMessage(request.tabId, {command: 'ts_restore_tab'});
+      this.chrome.tabs.get(request.tabId, (tab) => {
+        let url = new URL(tab.url);
+
+        if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
+          let pageUrl = url.searchParams.get('url');
+          chrome.tabs.update(tab.id, {url: pageUrl});
+        }
+
+      });
     }
-  }
-
-  suspend_current_tab(request, sender, sendResponse) {
-    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        this.chrome.tabs.sendMessage(tab.id, {command: 'ts_suspend_tab'});
-      });
-    });
-  }
-
-  restore_current_tab(request, sender, sendResponse) {
-    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        this.chrome.tabs.sendMessage(tab.id, {command: 'ts_restore_tab'});
-      });
-    });
-  }
-
-  suspend_all_tabs(request, sender, sendResponse) {
-    this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        this.chrome.tabs.sendMessage(tab.id, {command: 'ts_suspend_tab'});
-      });
-    });
-  }
-
-  suspend_all_tabs(request, sender, sendResponse) {
-    this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        if (tab.active) return;
-        this.chrome.tabs.sendMessage(tab.id, {command: 'ts_suspend_tab'});
-      });
-    });
-  }
-
-  restore_all_tabs(request, sender, sendResponse) {
-    this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
-      tabs.forEach((tab) => {
-        this.chrome.tabs.sendMessage(tab.id, {command: 'ts_restore_tab'});
-      });
-    });
   }
 
   get_tab_state(request, sender, sendResponse) {

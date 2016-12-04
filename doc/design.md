@@ -32,8 +32,6 @@ Extension Pop-up
       window
 
 - Automatic Suspension Commands:
-    - Disable automatic suspension for an hour
-    - Enable automatic suspension
     - Disable automatic suspension on this tab: Prevent automatic suspension for current 
       tab
     - Enable automatic suspension on this tab
@@ -62,6 +60,8 @@ Suspender's State
 -----------------
 - `suspendable`
     - `auto`: Green icon. the page will be suspended automatically.
+    - `auto_disabled`: Yellow icon. the page will NOT be suspended automatically
+       since automatic suspension is disable.
     - `form_changed`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
     - `tab_whitelist`: Yellow icon. the page will NOT be suspended automatically.
@@ -71,7 +71,7 @@ Suspender's State
 - `nonsuspenable`
     - `temporary_disabled`: The user temporarily disable automatic tab suspension 
        for this tab
-    - `system_page`: Red icon. system page cannot be suspended
+    - `system_page`: Gray icon. system page cannot be suspended
     - `not_running`: Red icon. content script is not running. Suspension is not 
        possible
     - `error`: Red icon. unknown error: Suspension is not 
@@ -84,11 +84,10 @@ IPC Commands (CORE)
 -------------------
 - `ts_suspend_tab`: suspend specified tab
 - `ts_restore_tab`: restore specified tab
-- `ts_suspend_current_tab`: suspend currently active tab
-- `ts_restore_current_tab`: restore currently active tab
-- `ts_suspend_all_tabs`: suspend all tabs
-- `ts_suspend_other_tabs`: suspend all tabs except the specified tab
-- `ts_restore_all_tabs`: restore all suspended tabs
+- `ts_tab_disable_auto_suspension`: temporarily disable automatic suspension on 
+   specified tab
+- `ts_tab_enable_auto_suspension`: enable automatic suspension on specified tab
+- `ts_whitelist_url`: whitelist specified url
 - `ts_get_tab_state`: get state of specified tab. It will ask content script 
   for state, and then override the returned value if necessary
 

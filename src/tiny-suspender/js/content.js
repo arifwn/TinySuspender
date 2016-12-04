@@ -35,7 +35,7 @@ class TinySuspenderContent {
 
     let textareas = document.querySelectorAll('textarea');
     for (let i = 0; i < textareas.length; i++) {
-      let input = inputs[i];
+      let input = textareas[i];
       input.onchange = this.formDataChanged.bind(this);
     }
   }

@@ -23,8 +23,8 @@ body {
 }
 
 .section {
-  border-bottom: solid 1px #00BCD4;
-  margin-bottom: 5px;
+  // border-bottom: solid 1px #2196F3;
+  // margin-bottom: 5px;
 }
 .section:last-of-type {
   border-bottom: none;
@@ -33,10 +33,26 @@ body {
 #status_text {
   margin: 0;
   padding: 16px 40px;
-  background: #00BCD4;
+  background: #607d8b;
   color: #fff;
   font-size: 12px;
-  line-height: 16px;
+  line-height: 18px;
+}
+
+#status_text.blue {
+  background: #2196F3;
+}
+
+#status_text.yellow {
+  background: #ff9800;
+}
+
+#status_text.red {
+  background: #f44336;
+}
+
+#status_container {
+  margin-bottom: 10px;
 }
 
 form {
@@ -46,14 +62,14 @@ form {
 
 form label {
   display: block;
-  font-size: 14px;
+  font-size: 11px;
   color: #757575;
   padding: 10px 0;
 }
 
 form input[type=number] {
   border: none;
-  border-bottom: 1px solid #00BCD4;
+  border-bottom: 1px solid #2196F3;
   display: block;
   font-size: 16px;
   font-family: "Helvetica","Arial",sans-serif;
@@ -63,17 +79,18 @@ form input[type=number] {
   height: 40px;
   background: 0 0;
   text-align: left;
-  color: inherit;
+  color: #757575;
   box-sizing: border-box;
 }
 
 form input[type=number]:focus {
   outline: none;
-  border-bottom: 2px solid #00BCD4;
+  border-bottom: 2px solid #2196F3;
 }
 
 form small {
   display: block;
   margin: 5px 0;
   padding: 0;
+  color: #757575;
 }
