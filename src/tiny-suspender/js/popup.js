@@ -206,9 +206,9 @@ class TinySuspenderPopup {
   onSuspend(e) {
     this.log('onSuspend');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -217,9 +217,9 @@ class TinySuspenderPopup {
   onSuspendAll(e) {
     this.log('onSuspendAll');
 
-    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -228,9 +228,9 @@ class TinySuspenderPopup {
   onSuspendOthers(e) {
     this.log('onSuspendOthers');
 
-    chrome.tabs.query({ active: false, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: false, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -239,9 +239,9 @@ class TinySuspenderPopup {
   onRestore(e) {
     this.log('onRestore');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -250,9 +250,9 @@ class TinySuspenderPopup {
   onRestoreAll(e) {
     this.log('onRestoreAll');
 
-    chrome.tabs.query({ currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -261,9 +261,9 @@ class TinySuspenderPopup {
   onDisableAutoSuspensionThisTab(e) {
     this.log('onDisableAutoSuspensionThisTab');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_tab_disable_auto_suspension", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_tab_disable_auto_suspension", tabId: tab.id});
       });
       window.close();
     });
@@ -272,9 +272,9 @@ class TinySuspenderPopup {
   onEnableAutoSuspensionThisTab(e) {
     this.log('onEnableAutoSuspensionThisTab');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
       });
       window.close();
     });
@@ -283,7 +283,7 @@ class TinySuspenderPopup {
   onAddPageToWhitelist(e) {
     this.log('onAddPageToWhitelist');
 
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
         let url = new URL(tab.url);
         let pageUrl = `${url.origin}${url.pathname}`;

@@ -65,7 +65,7 @@ class TinySuspenderCore {
 
     this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
-    chrome.runtime.onInstalled.addListener(this.onPluginInstalled.bind(this));
+    this.chrome.runtime.onInstalled.addListener(this.onPluginInstalled.bind(this));
     this.chrome.contextMenus.onClicked.addListener(this.onContextMenuClickHandler.bind(this));
 
     this.readSettings();
@@ -285,7 +285,7 @@ class TinySuspenderCore {
   createTabAutosuspensionTimer(tabId) {
     this.log('creating suspension timer for ', tabId)
     let alarmName = `${tabId}`;
-    chrome.alarms.create(alarmName, {delayInMinutes: this.idleTimeMinutes})
+    this.chrome.alarms.create(alarmName, {delayInMinutes: this.idleTimeMinutes})
   }
 
   initTimersForBackgroundTabs() {
@@ -327,7 +327,7 @@ class TinySuspenderCore {
       .then((state) => {
         if (this.isSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
-            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
           });
         }
       })
@@ -341,7 +341,7 @@ class TinySuspenderCore {
       .then((state) => {
         if (this.isAutoSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
-            chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
           });
         }
       })
@@ -358,7 +358,7 @@ class TinySuspenderCore {
     for (var i = 0; i < contexts.length; i++) {
       var context = contexts[i];
       var title = "Suspend Tab";
-      var id = chrome.contextMenus.create({
+      var id = this.chrome.contextMenus.create({
         "title": title,
         "contexts":[context],
         "id": "context" + context
@@ -416,7 +416,7 @@ class TinySuspenderCore {
 
         if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
           let pageUrl = url.searchParams.get('url');
-          chrome.tabs.update(tab.id, {url: pageUrl});
+          this.chrome.tabs.update(tab.id, {url: pageUrl});
         }
 
       });
