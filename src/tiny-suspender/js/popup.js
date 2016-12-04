@@ -21,8 +21,6 @@ class TinySuspenderPopup {
     document.querySelector('.restore-btn').onclick = this.onRestore.bind(this);
     document.querySelector('.restore-all-btn').onclick = this.onRestoreAll.bind(this);
 
-    document.querySelector('.temporary-disable-auto-suspend-btn').onclick = this.onTemporaryDisableAutoSuspension.bind(this);
-    document.querySelector('.enable-auto-suspend-btn').onclick = this.onEnableAutoSuspension.bind(this);
     document.querySelector('.disable-tab-auto-suspend-btn').onclick = this.onDisableAutoSuspensionThisTab.bind(this);
     document.querySelector('.enable-tab-auto-suspend-btn').onclick = this.onEnableAutoSuspensionThisTab.bind(this);
 
@@ -105,14 +103,6 @@ class TinySuspenderPopup {
 
   onRestoreAll(e) {
     this.log('onRestoreAll');
-  }
-
-  onTemporaryDisableAutoSuspension(e) {
-    this.log('onTemporaryDisableAutoSuspension');
-  }
-
-  onEnableAutoSuspension(e) {
-    this.log('onEnableAutoSuspension');
   }
 
   onDisableAutoSuspensionThisTab(e) {

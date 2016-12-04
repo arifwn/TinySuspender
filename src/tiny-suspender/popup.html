@@ -2,9 +2,11 @@
 <html>
 <head>
   <title>Tiny Suspender</title>
+  <!-- <link rel="stylesheet" type="text/css" href="css/material.css"> -->
   <link rel="stylesheet" type="text/css" href="css/popup.css">
 </head>
 <body>
+
   <div class="buttons">
     <div id="status_container" class="section">
       <div id="status_text">Obtaining tab status...</div>
@@ -22,8 +24,6 @@
     </div>
 
     <div id="auto_suspension_commands" class="section">
-      <a href="#" class="temporary-disable-auto-suspend-btn">Disable automatic suspension for an hour</a>
-      <a href="#" class="enable-auto-suspend-btn">Enable automatic suspension</a>
       <a href="#" class="disable-tab-auto-suspend-btn">Disable automatic suspension on this tab</a>
       <a href="#" class="enable-tab-auto-suspend-btn">Enable automatic suspension on this tab</a>
     </div>
@@ -34,7 +34,9 @@
 
     <div id="settings_commands" class="section">
       <a href="#" class="settings-btn">Settings</a>
-      <hr>
+    </div>
+
+    <div id="quick_settings_commands" class="section">
       <form id="config">
         <label>Automatically suspend backgroud tabs after (minutes):</label>
         <input type="number" value="" min="0" name="idle_time">

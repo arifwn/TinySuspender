@@ -5,21 +5,23 @@
   <link rel="stylesheet" type="text/css" href="css/settings.css">
 </head>
 <body>
-  <div class="header">Tiny Suspender: Settings</div>
   <div class="container">
+    <div class="header">Tiny Suspender: Settings</div>
     <form id="config">
-      <label>Automatically suspend backgroud tabs after (minutes):</label>
-      <input type="number" value="" min="0" name="idle_time">
-      <small>Set to 0 to disable automatic suspend.</small>
+      <div class="fieldset">
+        <label>Automatically suspend backgroud tabs after (minutes):</label>
+        <input type="number" value="" min="0" name="idle_time">
+        <small>Set to 0 to disable automatic suspend.</small>
+      </div>
       
-      <hr>
-      
-      <label>Whitelist:</label>
-      <textarea name="whitelist"></textarea>
-      <small>
-        Enter a list of urls that should be whitelisted. Prefix match will be used to match url with whitelist entries (e.g. https://google.com/ will also match https://google.com/maps). <br>
-        Regex can be specified by wrapping the rule in forward slashes (e.g. /*google*/).
-      </small>
+      <div class="fieldset">
+        <label>Whitelist:</label>
+        <textarea name="whitelist" placeholder="/google/"></textarea>
+        <small>
+          Enter a list of urls that should be whitelisted. Prefix match will be used to match url with whitelist entries (e.g. https://google.com/ will also match https://google.com/maps). <br>
+          Regex can be specified by wrapping the rule in forward slashes (e.g. /google/).
+        </small>
+      </div>
 
       <button type="submit">Save</button>
       <small id="message"></small>
