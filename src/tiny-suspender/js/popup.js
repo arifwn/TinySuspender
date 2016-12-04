@@ -161,7 +161,7 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.add-to-whitelist-btn').style.display = 'block';
+      document.querySelector('.add-to-whitelist-btn').style.display = 'none';
       setColor('gray');
     }
     else if (state === 'nonsuspenable:not_running') {
@@ -260,14 +260,47 @@ class TinySuspenderPopup {
 
   onDisableAutoSuspensionThisTab(e) {
     this.log('onDisableAutoSuspensionThisTab');
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.runtime.sendMessage({command: "ts_tab_disable_auto_suspension", tabId: tab.id});
+      });
+      window.close();
+    });
   }
 
   onEnableAutoSuspensionThisTab(e) {
     this.log('onEnableAutoSuspensionThisTab');
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
+      });
+      window.close();
+    });
   }
 
   onAddPageToWhitelist(e) {
     this.log('onAddPageToWhitelist');
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        let url = new URL(tab.url);
+        let pageUrl = `${url.origin}${url.pathname}`;
+
+        this.chrome.storage.sync.get('whitelist', (items) => {
+          let whitelist = items.whitelist;
+          if (!whitelist) {
+            whitelist = '';
+          }
+
+          whitelist = `${whitelist}\n${pageUrl}`;
+          this.chrome.storage.sync.set({'whitelist': whitelist}, () => {
+            window.close();
+          });
+        });
+      });
+    });
   }
 
   onSettings(e) {

@@ -49,6 +49,7 @@ class TinySuspenderCore {
       for (let key in this.tabState) {
         if (this.tabState.hasOwnProperty(key)) {
           if (!tabIds[key]) {
+            this.log('trimming', key);
             delete this.tabState[key];
           }
         }
@@ -286,7 +287,7 @@ class TinySuspenderCore {
   }
 
   initTimersForBackgroundTabs() {
-    console.log('initTimersForBackgroundTabs')
+    this.log('initTimersForBackgroundTabs')
     this.readSettings()
       .then((settings) => {
         if (settings.idleTimeMinutes == 0) return;
@@ -413,6 +414,19 @@ class TinySuspenderCore {
 
       });
       return true;
+    }
+  }
+
+  tab_disable_auto_suspension(request, sender, sendResponse) {
+    let state = {
+      state: 'suspendable:tab_whitelist'
+    }
+    this.tabState[request.tabId] = state;
+  }
+
+  tab_enable_auto_suspension(request, sender, sendResponse) {
+    if (this.tabState[request.tabId]) {
+      delete this.tabState[request.tabId];
     }
   }
 
