@@ -11,6 +11,7 @@ class TinySuspenderCore {
 
     this.idleTimeMinutes = 30;
     this.whitelist = [];
+    this.autorestore = false;
   }
 
   log() {
@@ -79,7 +80,9 @@ class TinySuspenderCore {
 
   readSettings() {
     let promise = new Promise((resolve, reject) => {
-      this.chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
+      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist'], (items) => {
+        this.autorestore = items.autorestore;
+
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
         if (isNaN(this.idleTimeMinutes)) {
           this.idleTimeMinutes = 30;
@@ -98,7 +101,7 @@ class TinySuspenderCore {
           }
         }
 
-        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist});
+        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore});
       });
     });
 
@@ -336,6 +339,16 @@ class TinySuspenderCore {
       });
   }
 
+  restoreTab(tabId) {
+    this.chrome.tabs.get(tabId, (tab) => {
+      let url = new URL(tab.url);
+      if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
+        let pageUrl = url.searchParams.get('url');
+        this.chrome.tabs.update(tab.id, {url: pageUrl});
+      }
+    });
+  }
+
   autoSuspendTab(tabId) {
     this.getTabState(tabId)
       .then((state) => {
@@ -348,6 +361,12 @@ class TinySuspenderCore {
       .catch((error) => {
 
       });
+  }
+
+  shouldAutorestore(tabId) {
+    if (this.autorestore) {
+      this.restoreTab(tabId);
+    }
   }
 
   // event handlers:
@@ -393,6 +412,9 @@ class TinySuspenderCore {
     this.getTabState(tabId)
       .then((state) => {
         this.setIconFromStateString(state.state, tabId);
+        if (state.state === 'suspended:suspended') {
+          this.shouldAutorestore(tabId);
+        }
       })
       .catch((error) => {
 
@@ -411,15 +433,7 @@ class TinySuspenderCore {
   restore_tab(request, sender, sendResponse) {
     this.log('restore_tab');
     if (request.tabId) {
-      this.chrome.tabs.get(request.tabId, (tab) => {
-        let url = new URL(tab.url);
-
-        if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
-          let pageUrl = url.searchParams.get('url');
-          this.chrome.tabs.update(tab.id, {url: pageUrl});
-        }
-
-      });
+      this.restoreTab(request.tabId);
     }
   }
 

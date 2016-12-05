@@ -1,6 +1,6 @@
 
 let initSettings = () => {
-  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist'], (items) => {
+  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore'], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -13,6 +13,13 @@ let initSettings = () => {
       whitelist = '';
     }
     document.querySelector('#config textarea[name=whitelist]').value = whitelist;
+
+    if (items.autorestore) {
+      document.querySelector('#config input[name=autorestore]').setAttribute('checked', 'checked');
+    }
+    else {
+      document.querySelector('#config input[name=autorestore]').removeAttribute('checked');
+    }
   });
 }
 
@@ -28,9 +35,12 @@ let onSettingsSubmit = (e) => {
   let whitelist = document.querySelector('#config textarea[name=whitelist]').value;
   if (!whitelist) whitelist = '';
 
+  let autorestore = document.querySelector('#config input[name=autorestore]').checked;
+
   chrome.storage.sync.set({
     'idleTimeMinutes': idleTimeMinutes,
-    'whitelist': whitelist
+    'whitelist': whitelist,
+    'autorestore': autorestore
   }, () => {
     document.querySelector('#message').textContent = 'Setting saved!';
   });
