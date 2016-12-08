@@ -64,6 +64,8 @@ Suspender's State
        since automatic suspension is disable.
     - `form_changed`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
+    - `audible`: Yellow icon. the page will NOT be suspended automatically.
+      Manual suspension is still possible
     - `tab_whitelist`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
     - `url_whitelist`: Yellow icon. the page will NOT be suspended automatically.

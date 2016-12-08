@@ -12,6 +12,7 @@ class TinySuspenderCore {
     this.idleTimeMinutes = 30;
     this.whitelist = [];
     this.autorestore = false;
+    this.skipAudible = false;
   }
 
   log() {
@@ -80,8 +81,9 @@ class TinySuspenderCore {
 
   readSettings() {
     let promise = new Promise((resolve, reject) => {
-      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist'], (items) => {
+      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist', 'skip_audible'], (items) => {
         this.autorestore = items.autorestore;
+        this.skipAudible = items.skip_audible;
 
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
         if (isNaN(this.idleTimeMinutes)) {
@@ -101,7 +103,7 @@ class TinySuspenderCore {
           }
         }
 
-        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore});
+        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore, skipAudible: this.skip_audible});
       });
     });
 
@@ -234,6 +236,10 @@ class TinySuspenderCore {
 
           if (response && response.state) {
             state = response.state;
+          }
+
+          if (state === 'suspendable:auto' && this.skipAudible && tab.audible) {
+            state = 'suspendable:audible';
           }
 
           // check this.tabState and whitelist to determine final state

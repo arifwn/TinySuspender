@@ -1,6 +1,6 @@
 
 let initSettings = () => {
-  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore'], (items) => {
+  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore', 'skip_audible'], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -20,6 +20,13 @@ let initSettings = () => {
     else {
       document.querySelector('#config input[name=autorestore]').removeAttribute('checked');
     }
+
+    if (items.skip_audible) {
+      document.querySelector('#config input[name=skip_audible]').setAttribute('checked', 'checked');
+    }
+    else {
+      document.querySelector('#config input[name=skip_audible]').removeAttribute('checked');
+    }
   });
 }
 
@@ -36,11 +43,13 @@ let onSettingsSubmit = (e) => {
   if (!whitelist) whitelist = '';
 
   let autorestore = document.querySelector('#config input[name=autorestore]').checked;
+  let skip_audible = document.querySelector('#config input[name=skip_audible]').checked;
 
   chrome.storage.sync.set({
     'idleTimeMinutes': idleTimeMinutes,
     'whitelist': whitelist,
-    'autorestore': autorestore
+    'autorestore': autorestore,
+    'skip_audible': skip_audible
   }, () => {
     document.querySelector('#message').textContent = 'Setting saved!';
   });
