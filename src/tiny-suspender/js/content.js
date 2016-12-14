@@ -18,8 +18,6 @@ class TinySuspenderContent {
   initEventHandlers() {
     this.chrome.runtime.onMessage.addListener(this.eventHandler.bind(this));
 
-    document.querySelector('input').onChange = this.formDataChanged.bind(this);
-
     setTimeout(this.initFormListener.bind(this), 500);
     setInterval(this.initFormListener.bind(this), 60000);
 
