@@ -72,6 +72,8 @@ Suspender's State
       Manual suspension is still possible
     - `audible`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
+    - `pinned`: Yellow icon. the page will NOT be suspended automatically.
+      Manual suspension is still possible
     - `tab_whitelist`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
     - `url_whitelist`: Yellow icon. the page will NOT be suspended automatically.
@@ -91,7 +93,8 @@ Suspender's State
 
 IPC Commands (CORE)
 -------------------
-- `ts_suspend_tab`: suspend specified tab
+- `ts_suspend_tab`: suspend specified tab. ignore whitelists and form changed status.
+- `ts_auto_suspend_tab`: suspend specified tab. respect whitelist and form changed status.
 - `ts_restore_tab`: restore specified tab
 - `ts_tab_disable_auto_suspension`: temporarily disable automatic suspension on 
    specified tab

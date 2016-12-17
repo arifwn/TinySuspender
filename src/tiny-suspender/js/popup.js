@@ -128,7 +128,19 @@ class TinySuspenderPopup {
       setColor('yellow');
     }
     else if (state === 'suspendable:audible') {
-      statusText = 'Audible tab will not be suspended automatically..';
+      statusText = 'Audible tab will not be suspended automatically.';
+      document.querySelector('.suspend-btn').style.display = 'block';
+      document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-others-btn').style.display = 'block';
+      document.querySelector('.restore-btn').style.display = 'none';
+      document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.add-to-whitelist-btn').style.display = 'block';
+      setColor('yellow');
+    }
+    else if (state === 'suspendable:pinned') {
+      statusText = 'Pinned tab will not be suspended automatically.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
@@ -263,7 +275,7 @@ class TinySuspenderPopup {
 
     this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
       });
       window.close();
     });
@@ -274,7 +286,7 @@ class TinySuspenderPopup {
 
     this.chrome.tabs.query({ active: false, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
-        this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
+        this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
       });
       window.close();
     });

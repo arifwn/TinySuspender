@@ -13,6 +13,7 @@ class TinySuspenderCore {
     this.whitelist = [];
     this.autorestore = false;
     this.skipAudible = false;
+    this.skipPinned= false;
     this.enableTabDiscard = false;
   }
 
@@ -82,9 +83,10 @@ class TinySuspenderCore {
 
   readSettings() {
     let promise = new Promise((resolve, reject) => {
-      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist', 'skip_audible', 'enable_tab_discard'], (items) => {
+      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist', 'skip_audible', 'skip_pinned', 'enable_tab_discard'], (items) => {
         this.autorestore = items.autorestore;
         this.skipAudible = items.skip_audible;
+        this.skipPinned = items.skip_pinned;
         this.enableTabDiscard = items.enable_tab_discard;
 
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
@@ -105,7 +107,7 @@ class TinySuspenderCore {
           }
         }
 
-        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore, skipAudible: this.skip_audible, enableTabDiscard: this.enableTabDiscard});
+        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore, skipAudible: this.skip_audible, skipPinned: this.skip_pinned, enableTabDiscard: this.enableTabDiscard});
       });
     });
 
@@ -174,6 +176,12 @@ class TinySuspenderCore {
       this.setIconState('green', tabId);
     }
     else if (state === 'suspendable:form_changed') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'suspendable:audible') {
+      this.setIconState('yellow', tabId);
+    }
+    else if (state === 'suspendable:pinned') {
       this.setIconState('yellow', tabId);
     }
     else if (state === 'suspendable:tab_whitelist') {
@@ -247,6 +255,10 @@ class TinySuspenderCore {
 
           if (state === 'suspendable:auto' && this.skipAudible && tab.audible) {
             state = 'suspendable:audible';
+          }
+
+          if (state === 'suspendable:auto' && this.skipPinned && tab.pinned) {
+            state = 'suspendable:pinned';
           }
 
           // ignore form changes when native tab discard in enabled.
@@ -383,7 +395,16 @@ class TinySuspenderCore {
       .then((state) => {
         if (this.isAutoSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
-            this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            if (this.enableTabDiscard) {
+              chrome.tabs.discard(tab.id);
+            }
+            else if (tab.discarded) {
+              // do nothing
+              this.log('this tab is already suspended via native tab discard: ', tab.id);
+            }
+            else {
+              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            }
           });
         }
       })
@@ -457,6 +478,11 @@ class TinySuspenderCore {
   suspend_tab(request, sender, sendResponse) {
     this.log('suspend_tab');
     this.suspendTab(request.tabId);
+  }
+
+  auto_suspend_tab(request, sender, sendResponse) {
+    this.log('suspend_tab');
+    this.autoSuspendTab(request.tabId);
   }
 
   restore_tab(request, sender, sendResponse) {
