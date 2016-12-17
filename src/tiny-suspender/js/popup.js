@@ -42,10 +42,10 @@ class TinySuspenderPopup {
 
       document.querySelector('#config input[name=idle_time]').value = this.idleTimeMinutes;
 
-      this.enable_tab_discard = items.enable_tab_discard;
-      if (items.enable_tab_discard) {
+      this.enableTabDiscard = items.enable_tab_discard;
+      if (this.enableTabDiscard) {
         let tabDiscardElement = document.createElement('span');
-        let tabDiscardMessage = document.createTextNode('Native tab discard is enabled. Some features will not be available.');
+        let tabDiscardMessage = document.createTextNode('Native tab discard is enabled. Many features are not available in this mode.');
         tabDiscardElement.appendChild(tabDiscardMessage);
         tabDiscardElement.classList.add('bottom-status');
         tabDiscardElement.classList.add('red');
@@ -175,6 +175,18 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
+    else if (state === 'nonsuspenable:discarded') {
+      statusText = 'This tab is currently suspended via native tab discard.';
+      document.querySelector('.suspend-btn').style.display = 'block';
+      document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-others-btn').style.display = 'block';
+      document.querySelector('.restore-btn').style.display = 'none';
+      document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.add-to-whitelist-btn').style.display = 'block';
+      setColor('yellow');
+    }
     else if (state === 'nonsuspenable:system_page') {
       statusText = 'System page cannot be suspended.';
       document.querySelector('.suspend-btn').style.display = 'none';
@@ -224,6 +236,15 @@ class TinySuspenderPopup {
       setColor('red');
     }
     document.querySelector('#status_text').textContent = statusText;
+
+    if (this.enableTabDiscard) {
+      document.querySelector('.suspend-btn').style.display = 'none';
+      document.querySelector('.suspend-all-btn').style.display = 'none';
+      document.querySelector('.suspend-others-btn').style.display = 'block';
+      document.querySelector('.suspend-others-btn').text = 'Suspend all background tabs';
+      document.querySelector('.restore-btn').style.display = 'none';
+      document.querySelector('.restore-all-btn').style.display = 'none';
+    }
   }
 
   onSuspend(e) {

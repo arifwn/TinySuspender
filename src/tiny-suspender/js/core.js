@@ -209,6 +209,11 @@ class TinySuspenderCore {
           return;
         }
 
+        if (tab.discarded) {
+          resolve({state: 'nonsuspenable:discarded'});
+          return;
+        }
+
         if (url && url.protocol === 'chrome-extension:') {
           resolve({state: 'nonsuspenable:system_page'});
           return;
@@ -242,6 +247,13 @@ class TinySuspenderCore {
 
           if (state === 'suspendable:auto' && this.skipAudible && tab.audible) {
             state = 'suspendable:audible';
+          }
+
+          // ignore form changes when native tab discard in enabled.
+          // native tab discard should be able to persist form data
+
+          if (this.enableTabDiscard && (state == 'suspendable:form_changed')) {
+            state = 'suspendable:auto';
           }
 
           // check this.tabState and whitelist to determine final state
@@ -338,7 +350,16 @@ class TinySuspenderCore {
       .then((state) => {
         if (this.isSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
-            this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            if (this.enableTabDiscard) {
+              chrome.tabs.discard(tab.id);
+            }
+            else if (tab.discarded) {
+              // do nothing
+              this.log('this tab is already suspended via native tab discard: ', tab.id);
+            }
+            else {
+              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+            }
           });
         }
       })

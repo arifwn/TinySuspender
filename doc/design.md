@@ -82,6 +82,7 @@ Suspender's State
     - `system_page`: Gray icon. system page cannot be suspended
     - `not_running`: Red icon. content script is not running. Suspension is not 
        possible
+    - `discarded`: Red icon. This tab is currently suspended via native tab discard
     - `error`: Red icon. unknown error: Suspension is not 
        possible
 - `suspended`
