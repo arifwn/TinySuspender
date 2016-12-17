@@ -48,9 +48,10 @@ Extension Pop-up
 Settings
 --------
 
-- Automatically suspend backgroud tabs after (minutes):
-- Whitelist:
-- Automatically restore suspended tab when brought to foreground
+- Automatically suspend backgroud tabs after (minutes): integer
+- Whitelist: text
+- Automatically restore suspended tab when brought to foreground: boolean
+- Don't automatically suspend audible tabs: boolean
 
 
 Internals
