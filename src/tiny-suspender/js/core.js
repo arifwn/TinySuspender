@@ -210,6 +210,10 @@ class TinySuspenderCore {
   getTabState(tabId) {
     let promise = new Promise((resolve, reject) => {
       this.chrome.tabs.get(tabId, (tab) => {
+        if (!tab) {
+          reject(new Error('Tab with id: ' + tabId + ' is not found!'));
+        }
+
         let url = new URL(tab.url);
 
         if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
