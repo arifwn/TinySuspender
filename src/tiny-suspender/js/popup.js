@@ -34,13 +34,24 @@ class TinySuspenderPopup {
   }
 
   initQuickSettings() {
-    this.chrome.storage.sync.get('idleTimeMinutes', (items) => {
+    this.chrome.storage.sync.get(['idleTimeMinutes', 'enable_tab_discard'], (items) => {
       this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
       if (isNaN(this.idleTimeMinutes)) {
         this.idleTimeMinutes = 30;
       }
 
       document.querySelector('#config input[name=idle_time]').value = this.idleTimeMinutes;
+
+      this.enable_tab_discard = items.enable_tab_discard;
+      if (items.enable_tab_discard) {
+        let tabDiscardElement = document.createElement('span');
+        let tabDiscardMessage = document.createTextNode('Native tab discard is enabled. Some features will not be available.');
+        tabDiscardElement.appendChild(tabDiscardMessage);
+        tabDiscardElement.classList.add('bottom-status');
+        tabDiscardElement.classList.add('red');
+    
+        document.querySelector('#bottom_status_container').appendChild(tabDiscardElement);
+      }
     });
   }
 

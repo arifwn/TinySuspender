@@ -121,7 +121,21 @@ form button {
   vertical-align: middle;
 }
 
-#message {
+#message,
+#message2 {
   display: inline-block;
   margin-left: 5px;
+}
+
+.infobox {
+  margin-left: 20px;
+  color: #777;
+}
+
+.infobox p {
+  margin-top: 5px;
+}
+
+.separator {
+  margin-top: 40px;
 }

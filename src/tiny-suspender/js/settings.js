@@ -1,6 +1,6 @@
 
 let initSettings = () => {
-  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore', 'skip_audible'], (items) => {
+  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore', 'skip_audible', 'enable_tab_discard'], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -27,6 +27,13 @@ let initSettings = () => {
     else {
       document.querySelector('#config input[name=skip_audible]').removeAttribute('checked');
     }
+
+    if (items.enable_tab_discard) {
+      document.querySelector('#config input[name=enable_tab_discard]').setAttribute('checked', 'checked');
+    }
+    else {
+      document.querySelector('#config input[name=enable_tab_discard]').removeAttribute('checked');
+    }
   });
 }
 
@@ -44,14 +51,17 @@ let onSettingsSubmit = (e) => {
 
   let autorestore = document.querySelector('#config input[name=autorestore]').checked;
   let skip_audible = document.querySelector('#config input[name=skip_audible]').checked;
+  let enable_tab_discard = document.querySelector('#config input[name=enable_tab_discard]').checked;
 
   chrome.storage.sync.set({
     'idleTimeMinutes': idleTimeMinutes,
     'whitelist': whitelist,
     'autorestore': autorestore,
-    'skip_audible': skip_audible
+    'skip_audible': skip_audible,
+    'enable_tab_discard': enable_tab_discard
   }, () => {
     document.querySelector('#message').textContent = 'Setting saved!';
+    document.querySelector('#message2').textContent = 'Setting saved!';
   });
 }
 

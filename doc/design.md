@@ -53,6 +53,11 @@ Settings
 - Automatically restore suspended tab when brought to foreground: boolean
 - Don't automatically suspend audible tabs: boolean
 
+- Experimental: added option to use chrome.tabs.discard api from CORE
+  - https://developer.chrome.com/extensions/tabs#method-discard
+  - programmatic restore is not available when using this feature
+  - active tab cannot be suspended when using the tab discard api
+
 
 Internals
 =========

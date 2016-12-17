@@ -94,3 +94,17 @@ form small {
   padding: 0;
   color: #757575;
 }
+
+
+.section .bottom-status {
+  display: block;
+  margin: 0;
+  padding: 10px 40px;
+  color: #757575;
+  text-decoration: none;
+  font-size: 10px;
+}
+
+.section .bottom-status.red {
+  color: red;
+}
