@@ -212,6 +212,7 @@ class TinySuspenderCore {
       this.chrome.tabs.get(tabId, (tab) => {
         if (!tab) {
           reject(new Error('Tab with id: ' + tabId + ' is not found!'));
+          return;
         }
 
         let url = new URL(tab.url);
