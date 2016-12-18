@@ -239,10 +239,10 @@ class TinySuspenderCore {
 
         let answered = false;
 
-        // if content script did not answer within 2 seconds, return state as nonsuspenable:not_running
+        // if content script did not answer within 2 seconds, return state as 'suspendable:auto'
         let timer = setTimeout(() => {
           if (!answered) {
-            resolve({state: 'nonsuspenable:not_running'});
+            resolve({state: 'suspendable:auto'});
           }
         }, 2000);
 
