@@ -5,7 +5,7 @@
   "author": "Arif Widi Nugroho",
   "short_name": "Tiny Suspender",
   "description": "Unload / suspend / hibernate idle tabs to reduce memory and cpu usage.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "options_page": "settings.html",
   "browser_action": {
     "default_title": "Tiny Suspender",
