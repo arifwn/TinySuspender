@@ -76,4 +76,13 @@ let onSettingsSubmit = (e) => {
 
 
 document.querySelector('#config').onsubmit = onSettingsSubmit;
+
+
+let onKeyboardShortcuts = (e) => {
+  e.preventDefault();
+  chrome.tabs.create({url: 'chrome://extensions/configureCommands'});
+}
+
+document.querySelector('.shortcuts').onclick = onKeyboardShortcuts;
+
 initSettings();

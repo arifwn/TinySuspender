@@ -45,6 +45,14 @@ form label {
   margin-bottom: 0;
 }
 
+form a.shortcuts {
+  float: right;
+  color: #2196f3;
+  text-decoration: none;
+  font-size: 18px;
+  margin-top: 12px;
+}
+
 form input[type=number] {
   border: none;
   border-bottom: 1px solid #00BCD4;

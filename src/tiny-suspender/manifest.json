@@ -40,6 +40,39 @@
     "alarms",
     "chrome://favicon/*"
   ],
+  "commands": {
+    "suspend-active-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Suspend active tab"
+    },
+    "suspend-all-tabs": {
+      "description": "Suspend all tabs"
+    },
+    "suspend-other-tabs": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+O",
+        "mac": "Command+Shift+O"
+      },
+      "description": "Suspend background tabs"
+    },
+    "restore-active-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U",
+        "mac": "Command+Shift+U"
+      },
+      "description": "Restore active tab"
+    },
+    "restore-other-tabs": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Y",
+        "mac": "Command+Shift+Y"
+      },
+      "description": "Restore background tabs"
+    }
+  },
   "icons": {
     "16": "img/icon-16.png",
     "48": "img/icon-48.png",

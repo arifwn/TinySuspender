@@ -72,6 +72,7 @@ class TinySuspenderCore {
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
     this.chrome.runtime.onInstalled.addListener(this.onPluginInstalled.bind(this));
     this.chrome.contextMenus.onClicked.addListener(this.onContextMenuClickHandler.bind(this));
+    this.chrome.commands.onCommand.addListener(this.onCommand.bind(this));
 
     this.readSettings();
     this.chrome.storage.onChanged.addListener((changes, namespace) => {
@@ -506,6 +507,49 @@ class TinySuspenderCore {
   onContextMenuClickHandler(info, tab) {
     this.suspendTab(tab.id);
   };
+
+  onCommand(command) {
+    if (command === 'suspend-active-tab') {
+      this.chrome.tabs.query({ active: true }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.suspendTab(tabId);
+        });
+      });
+    }
+    if (command === 'suspend-all-tabs') {
+      this.chrome.tabs.query({}, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.suspendTab(tabId);
+        });
+      });
+    }
+    if (command === 'suspend-other-tabs') {
+      this.chrome.tabs.query({ active: false }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.suspendTab(tabId);
+        });
+      });
+    }
+    if (command === 'restore-active-tab') {
+      this.chrome.tabs.query({ active: true }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.restoreTab(tabId);
+        });
+      });
+    }
+    if (command === 'restore-other-tabs') {
+      this.chrome.tabs.query({ active: false }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.restoreTab(tabId);
+        });
+      });
+    }
+  }
 
   onTabUpdated(tabId, changeInfo, tab) {
     this.getTabState(tabId)
