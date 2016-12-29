@@ -27,7 +27,11 @@ if (!pageUrl) {
 
 
 document.onclick = () => {
-  location = pageUrl;
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
+      });
+    });
 }
 
 

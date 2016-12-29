@@ -8,6 +8,7 @@ class TinySuspenderCore {
     // tabState is used to store per-tab status overrides,
     // e.g. don't suspend this tab for one hour, don't suspend for now, etc
     this.tabState = {};
+    this.tabScrolls = {};
 
     this.idleTimeMinutes = 30;
     this.whitelist = [];
@@ -301,6 +302,28 @@ class TinySuspenderCore {
     return promise;
   }
 
+  getTabScroll(tabId) {
+    let promise = new Promise((resolve, reject) => {
+
+      let answered = false;
+
+      // if content script did not answer within 2 seconds, return state as 'suspendable:auto'
+      let timer = setTimeout(() => {
+        if (!answered) {
+          resolve({x: 0, y: 0});
+        }
+      }, 500);
+
+      // ask content script for current state
+      // Content script may prevent autosuspension if the user has unsaved form data
+      this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_scroll'}, {}, (response) => {
+        if (response && response.scroll) resolve(response.scroll);
+        else resolve({x: 0, y: 0});
+      });
+    });
+    return promise;
+  }
+
   isSuspendable(state) {
     if (state && state.split) {
       let suspendable = state.split(':')[0];
@@ -363,8 +386,14 @@ class TinySuspenderCore {
   }
 
   suspendTab(tabId) {
+    let tabState;
     this.getTabState(tabId)
       .then((state) => {
+        tabState = state;
+        return this.getTabScroll(tabId);
+      })
+      .then((scroll) => {
+        let state = tabState;
         if (this.isSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
             if (this.enableTabDiscard) {
@@ -375,7 +404,7 @@ class TinySuspenderCore {
               this.log('this tab is already suspended via native tab discard: ', tab.id);
             }
             else {
-              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl) + '&scroll_x=' + encodeURIComponent(scroll.x) + '&scroll_y=' + encodeURIComponent(scroll.y)});
             }
           });
         }
@@ -389,6 +418,8 @@ class TinySuspenderCore {
     this.chrome.tabs.get(tabId, (tab) => {
       let url = new URL(tab.url);
       if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
+        this.tabScrolls[tabId] = {x: url.searchParams.get('scroll_x'), y: url.searchParams.get('scroll_y')};
+
         let pageUrl = url.searchParams.get('url');
         this.chrome.tabs.update(tab.id, {url: pageUrl});
       }
@@ -396,8 +427,14 @@ class TinySuspenderCore {
   }
 
   autoSuspendTab(tabId) {
+    let tabState;
     this.getTabState(tabId)
       .then((state) => {
+        tabState = state;
+        return this.getTabScroll(tabId);
+      })
+      .then((scroll) => {
+        let state = tabState;
         if (this.isAutoSuspendable(state.state)) {
           this.chrome.tabs.get(tabId, (tab) => {
             if (this.enableTabDiscard) {
@@ -408,7 +445,7 @@ class TinySuspenderCore {
               this.log('this tab is already suspended via native tab discard: ', tab.id);
             }
             else {
-              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)});
+              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl) + '&scroll_x=' + encodeURIComponent(scroll.x) + '&scroll_y=' + encodeURIComponent(scroll.y)});
             }
           });
         }
@@ -422,6 +459,24 @@ class TinySuspenderCore {
     if (this.autorestore) {
       this.restoreTab(tabId);
     }
+  }
+
+  shouldTabScrollToPosition(tabId) {
+    let scroll = this.tabScrolls[tabId];
+    if (scroll) {
+      return true;
+    }
+    return false;
+  }
+
+  scrollTabToPosition(tabId) {
+    let scroll = this.tabScrolls[tabId];
+    delete this.tabScrolls[tabId];
+    this.sendScrollCommand(tabId, scroll);
+  }
+
+  sendScrollCommand(tabId, scroll) {
+    this.chrome.tabs.sendMessage(tabId, {command: 'ts_set_tab_scroll', scroll: scroll});
   }
 
   // event handlers:
@@ -460,6 +515,12 @@ class TinySuspenderCore {
       .catch((error) => {
 
       });
+
+    if (changeInfo.status === 'complete') {
+      if (this.shouldTabScrollToPosition(tabId)) {
+        this.scrollTabToPosition(tabId);
+      }
+    }
   }
 
   onTabActivated(activeInfo) {

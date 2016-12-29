@@ -108,5 +108,10 @@ IPC Commands (Content Script)
 -----------------------------
 - `ts_get_tab_state`: answer with `suspendable:auto` or `suspended:suspended`.
   May be overridden by CORE
+- `ts_get_tab_scroll`: answer with current scroll position. e.g. `{x: 0, y: 0}`
+- `ts_set_tab_scroll`: set current page scroll position.
+  - parameter:
+    - `scroll`: e.g. `{x: 0, y: 0}`
+
 
 

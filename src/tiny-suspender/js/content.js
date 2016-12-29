@@ -64,6 +64,20 @@ class TinySuspenderContent {
       sendResponse({state: 'suspendable:auto'});
     }
   }
+
+  get_tab_scroll(request, sender, sendResponse) {
+    let scrollPosition = {
+      x: document.body.scrollLeft,
+      y: document.body.scrollTop
+    };
+
+    sendResponse({scroll: scrollPosition});
+  }
+
+  set_tab_scroll(request, sender, sendResponse) {
+    let scroll = request.scroll;
+    window.scrollTo(scroll.x, scroll.y);
+  }
 }
 
 
