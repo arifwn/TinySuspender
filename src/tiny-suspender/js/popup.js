@@ -151,6 +151,18 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
+    else if (state === 'suspendable:offline') {
+      statusText = 'Network appears to be down. Tabs will not be suspended automatically.';
+      document.querySelector('.suspend-btn').style.display = 'block';
+      document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-others-btn').style.display = 'block';
+      document.querySelector('.restore-btn').style.display = 'none';
+      document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
+      document.querySelector('.add-to-whitelist-btn').style.display = 'block';
+      setColor('yellow');
+    }
     else if (state === 'suspendable:tab_whitelist') {
       statusText = 'This tab will not be suspended automatically for now.';
       document.querySelector('.suspend-btn').style.display = 'block';

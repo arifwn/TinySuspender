@@ -1,6 +1,13 @@
 
 let initSettings = () => {
-  chrome.storage.sync.get(['idleTimeMinutes', 'whitelist', 'autorestore', 'skip_audible', 'skip_pinned', 'enable_tab_discard'], (items) => {
+  chrome.storage.sync.get([
+    'idleTimeMinutes',
+    'whitelist',
+    'autorestore',
+    'skip_audible',
+    'skip_pinned',
+    'skip_when_offline',
+    'enable_tab_discard'], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -35,6 +42,13 @@ let initSettings = () => {
       document.querySelector('#config input[name=skip_pinned]').removeAttribute('checked');
     }
 
+    if (items.skip_when_offline) {
+      document.querySelector('#config input[name=skip_when_offline]').setAttribute('checked', 'checked');
+    }
+    else {
+      document.querySelector('#config input[name=skip_when_offline]').removeAttribute('checked');
+    }
+
     if (items.enable_tab_discard) {
       document.querySelector('#config input[name=enable_tab_discard]').setAttribute('checked', 'checked');
     }
@@ -59,6 +73,7 @@ let onSettingsSubmit = (e) => {
   let autorestore = document.querySelector('#config input[name=autorestore]').checked;
   let skip_audible = document.querySelector('#config input[name=skip_audible]').checked;
   let skip_pinned = document.querySelector('#config input[name=skip_pinned]').checked;
+  let skip_when_offline = document.querySelector('#config input[name=skip_when_offline]').checked;
   let enable_tab_discard = document.querySelector('#config input[name=enable_tab_discard]').checked;
 
   chrome.storage.sync.set({
@@ -66,6 +81,7 @@ let onSettingsSubmit = (e) => {
     'whitelist': whitelist,
     'autorestore': autorestore,
     'skip_audible': skip_audible,
+    'skip_when_offline': skip_when_offline,
     'skip_pinned': skip_pinned,
     'enable_tab_discard': enable_tab_discard
   }, () => {
@@ -84,5 +100,7 @@ let onKeyboardShortcuts = (e) => {
 }
 
 document.querySelector('.shortcuts').onclick = onKeyboardShortcuts;
+
+document.querySelector('#version_string').textContent = 'v' + chrome.runtime.getManifest().version;
 
 initSettings();

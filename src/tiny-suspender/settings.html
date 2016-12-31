@@ -6,7 +6,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="header">Tiny Suspender: Settings</div>
+    <div class="header">Tiny Suspender <span id="version_string"></span></div>
     <form id="config">
 
       <div class="fieldset">
@@ -25,6 +25,10 @@
 
       <div class="fieldset checkbox">
         <label><input type="checkbox" name="skip_pinned" value="enabled"> Don't automatically suspend pinned tabs</label>
+      </div>
+
+      <div class="fieldset checkbox">
+        <label><input type="checkbox" name="skip_when_offline" value="enabled"> Don't automatically suspend tabs when offline</label>
       </div>
 
       <div class="fieldset">

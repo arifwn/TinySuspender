@@ -74,6 +74,8 @@ Suspender's State
       Manual suspension is still possible
     - `pinned`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
+    - `offlise`: Yellow icon. The page will NOT be suspended automatically.
+      Manual suspension is still possible
     - `tab_whitelist`: Yellow icon. the page will NOT be suspended automatically.
       Manual suspension is still possible
     - `url_whitelist`: Yellow icon. the page will NOT be suspended automatically.

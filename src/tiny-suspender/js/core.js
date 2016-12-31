@@ -15,6 +15,7 @@ class TinySuspenderCore {
     this.autorestore = false;
     this.skipAudible = false;
     this.skipPinned= false;
+    this.skipWhenOffline = false;
     this.enableTabDiscard = false;
   }
 
@@ -85,10 +86,19 @@ class TinySuspenderCore {
 
   readSettings() {
     let promise = new Promise((resolve, reject) => {
-      this.chrome.storage.sync.get(['idleTimeMinutes', 'autorestore', 'whitelist', 'skip_audible', 'skip_pinned', 'enable_tab_discard'], (items) => {
+      this.chrome.storage.sync.get([
+        'idleTimeMinutes',
+        'autorestore',
+        'whitelist',
+        'skip_audible',
+        'skip_pinned',
+        'skip_when_offline',
+        'enable_tab_discard'
+        ], (items) => {
         this.autorestore = items.autorestore;
         this.skipAudible = items.skip_audible;
         this.skipPinned = items.skip_pinned;
+        this.skipWhenOffline = items.skip_when_offline;
         this.enableTabDiscard = items.enable_tab_discard;
 
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
@@ -109,7 +119,15 @@ class TinySuspenderCore {
           }
         }
 
-        resolve({idleTimeMinutes: this.idleTimeMinutes, whitelist: this.whitelist, autorestore: this.autorestore, skipAudible: this.skip_audible, skipPinned: this.skip_pinned, enableTabDiscard: this.enableTabDiscard});
+        resolve({
+          idleTimeMinutes: this.idleTimeMinutes,
+          whitelist: this.whitelist,
+          autorestore: this.autorestore,
+          skipAudible: this.skip_audible,
+          skipPinned: this.skip_pinned,
+          skipWhenOffline: this.skipWhenOffline,
+          enableTabDiscard: this.enableTabDiscard
+        });
       });
     });
 
@@ -266,6 +284,10 @@ class TinySuspenderCore {
 
           if (state === 'suspendable:auto' && this.skipPinned && tab.pinned) {
             state = 'suspendable:pinned';
+          }
+
+          if (state === 'suspendable:auto' && this.skipWhenOffline && (!navigator.onLine)) {
+            state = 'suspendable:offline';
           }
 
           // ignore form changes when native tab discard in enabled.
