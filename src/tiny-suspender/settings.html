@@ -3,6 +3,7 @@
 <head>
   <title>Tiny Suspender: Settings</title>
   <link rel="stylesheet" type="text/css" href="css/settings.css">
+  <link rel="stylesheet" type="text/css" href="css/settings-dark.css">
 </head>
 <body>
   <div class="container">
@@ -31,7 +32,12 @@
         <label><input type="checkbox" name="skip_when_offline" value="enabled"> Don't automatically suspend tabs when offline</label>
       </div>
 
-      <div class="fieldset">
+      <div class="fieldset checkbox">
+        <label><input type="checkbox" name="dark_mode" value="disabled"> Toggle Dark Mode</label>
+      </div>
+
+
+        <div class="fieldset">
         <label>Whitelist:</label>
         <textarea name="whitelist" placeholder="/google/"></textarea>
         <small>
