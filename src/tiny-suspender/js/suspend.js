@@ -63,3 +63,14 @@ if (title) {
 if (darkMode) {
   document.body.classList.add('dark-mode');
 }
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log(changes, namespace)
+  if (changes.dark_mode && changes.dark_mode.newValue) {
+    document.body.classList.add('dark-mode');
+  }
+  else {
+    document.body.classList.remove('dark-mode');
+  }
+});
+

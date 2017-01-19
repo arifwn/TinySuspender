@@ -8,7 +8,8 @@ let initSettings = () => {
     'skip_pinned',
     'skip_when_offline',
     'enable_tab_discard',
-    'dark_mode'], (items) => {
+    'dark_mode'
+  ], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -56,6 +57,7 @@ let initSettings = () => {
     else {
       document.querySelector('#config input[name=enable_tab_discard]').removeAttribute('checked');
     }
+
     if (items.dark_mode) {
       document.querySelector('#config input[name=dark_mode]').setAttribute('checked', 'checked');
       document.body.classList.add('dark-mode');
@@ -102,7 +104,7 @@ let onSettingsSubmit = (e) => {
     document.querySelector('#message2').textContent = 'Setting saved!';
 
     // check if dark mode is enabled
-    if(dark_mode) document.body.classList.add('dark-mode');
+    if (dark_mode) document.body.classList.add('dark-mode');
     else document.body.classList.remove('dark-mode');
   });
 }

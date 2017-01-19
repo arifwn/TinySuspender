@@ -16,15 +16,15 @@ body.dark-mode {
 }
 
 .dark-mode #status_text.blue {
-  background: #2196F3;
+  background: #0078d8;
 }
 
 .dark-mode #status_text.yellow {
-  background: #ff9800;
+  background: #b16900;
 }
 
 .dark-mode #status_text.red {
-  background: #f44336;
+  background: #a70b00;
 }
 
 .dark-mode #status_container {
