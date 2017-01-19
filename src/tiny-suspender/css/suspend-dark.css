@@ -1,0 +1,25 @@
+body.dark-mode {
+  background-color: #333;
+}
+
+.dark-mode .title {
+  background-color: #333;
+  color: #eee;
+  border-bottom: 1px solid #555;
+}
+
+.dark-mode .title .icon {
+  background: #444;
+}
+
+.dark-mode .title .description {
+  color: #eee;
+}
+
+.dark-mode .title .url {
+  color: #0e94ff;
+}
+
+.dark-mode .suspend-message {
+  color: #eee;
+}

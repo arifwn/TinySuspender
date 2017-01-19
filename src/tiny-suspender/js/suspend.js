@@ -3,6 +3,7 @@ let suspendUrl = new URL(location.href);
 let pageUrl = suspendUrl.searchParams.get('url');
 let favIconUrl = suspendUrl.searchParams.get('favIconUrl');
 let title = suspendUrl.searchParams.get('title');
+let darkMode = suspendUrl.searchParams.get('dark_mode') === 'true';
 
 // compatibility with previous version
 // will be removed in the next version
@@ -58,3 +59,18 @@ if (title) {
   document.title = title;
   document.querySelector('.title .description').textContent = title;
 }
+
+if (darkMode) {
+  document.body.classList.add('dark-mode');
+}
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  console.log(changes, namespace)
+  if (changes.dark_mode && changes.dark_mode.newValue) {
+    document.body.classList.add('dark-mode');
+  }
+  else {
+    document.body.classList.remove('dark-mode');
+  }
+});
+

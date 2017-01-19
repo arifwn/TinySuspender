@@ -7,7 +7,9 @@ let initSettings = () => {
     'skip_audible',
     'skip_pinned',
     'skip_when_offline',
-    'enable_tab_discard'], (items) => {
+    'enable_tab_discard',
+    'dark_mode'
+  ], (items) => {
     let idleTimeMinutes = parseInt(items.idleTimeMinutes);
     if (isNaN(idleTimeMinutes)) {
       idleTimeMinutes = 30;
@@ -55,6 +57,17 @@ let initSettings = () => {
     else {
       document.querySelector('#config input[name=enable_tab_discard]').removeAttribute('checked');
     }
+
+    if (items.dark_mode) {
+      document.querySelector('#config input[name=dark_mode]').setAttribute('checked', 'checked');
+      document.body.classList.add('dark-mode');
+    }
+    else {
+      document.querySelector('#config input[name=dark_mode]').removeAttribute('checked');
+      document.body.classList.remove('dark-mode');
+    }
+
+
   });
 }
 
@@ -75,6 +88,7 @@ let onSettingsSubmit = (e) => {
   let skip_pinned = document.querySelector('#config input[name=skip_pinned]').checked;
   let skip_when_offline = document.querySelector('#config input[name=skip_when_offline]').checked;
   let enable_tab_discard = document.querySelector('#config input[name=enable_tab_discard]').checked;
+  let dark_mode = document.querySelector('#config input[name=dark_mode]').checked;
 
   chrome.storage.sync.set({
     'idleTimeMinutes': idleTimeMinutes,
@@ -83,10 +97,15 @@ let onSettingsSubmit = (e) => {
     'skip_audible': skip_audible,
     'skip_when_offline': skip_when_offline,
     'skip_pinned': skip_pinned,
-    'enable_tab_discard': enable_tab_discard
+    'enable_tab_discard': enable_tab_discard,
+    'dark_mode': dark_mode
   }, () => {
     document.querySelector('#message').textContent = 'Setting saved!';
     document.querySelector('#message2').textContent = 'Setting saved!';
+
+    // check if dark mode is enabled
+    if (dark_mode) document.body.classList.add('dark-mode');
+    else document.body.classList.remove('dark-mode');
   });
 }
 

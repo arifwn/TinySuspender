@@ -17,6 +17,8 @@ class TinySuspenderCore {
     this.skipPinned= false;
     this.skipWhenOffline = false;
     this.enableTabDiscard = false;
+
+    this.darkMode = false;
   }
 
   log() {
@@ -93,13 +95,14 @@ class TinySuspenderCore {
         'skip_audible',
         'skip_pinned',
         'skip_when_offline',
-        'enable_tab_discard'
-        ], (items) => {
+        'enable_tab_discard',
+        'dark_mode'], (items) => {
         this.autorestore = items.autorestore;
         this.skipAudible = items.skip_audible;
         this.skipPinned = items.skip_pinned;
         this.skipWhenOffline = items.skip_when_offline;
         this.enableTabDiscard = items.enable_tab_discard;
+        this.darkMode = items.dark_mode;
 
         this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
         if (isNaN(this.idleTimeMinutes)) {
@@ -126,7 +129,8 @@ class TinySuspenderCore {
           skipAudible: this.skip_audible,
           skipPinned: this.skip_pinned,
           skipWhenOffline: this.skipWhenOffline,
-          enableTabDiscard: this.enableTabDiscard
+          enableTabDiscard: this.enableTabDiscard,
+          darkMode: this.darkMode
         });
       });
     });
@@ -427,7 +431,14 @@ class TinySuspenderCore {
               this.log('this tab is already suspended via native tab discard: ', tab.id);
             }
             else {
-              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl) + '&scroll_x=' + encodeURIComponent(scroll.x) + '&scroll_y=' + encodeURIComponent(scroll.y)});
+              this.chrome.tabs.update(tab.id, {
+                url: 'suspend.html?url=' + encodeURIComponent(tab.url)
+                   + '&title=' + encodeURIComponent(tab.title)
+                   + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)
+                   + '&scroll_x=' + encodeURIComponent(scroll.x)
+                   + '&scroll_y=' + encodeURIComponent(scroll.y)
+                   + '&dark_mode=' + encodeURIComponent(this.darkMode)
+              });
             }
           });
         }
@@ -468,7 +479,14 @@ class TinySuspenderCore {
               this.log('this tab is already suspended via native tab discard: ', tab.id);
             }
             else {
-              this.chrome.tabs.update(tab.id, {url: 'suspend.html?url=' + encodeURIComponent(tab.url) + '&title=' + encodeURIComponent(tab.title) + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl) + '&scroll_x=' + encodeURIComponent(scroll.x) + '&scroll_y=' + encodeURIComponent(scroll.y)});
+              this.chrome.tabs.update(tab.id, {
+                url: 'suspend.html?url=' + encodeURIComponent(tab.url)
+                   + '&title=' + encodeURIComponent(tab.title)
+                   + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)
+                   + '&scroll_x=' + encodeURIComponent(scroll.x)
+                   + '&scroll_y=' + encodeURIComponent(scroll.y)
+                   + '&dark_mode=' + encodeURIComponent(this.darkMode)
+              });
             }
           });
         }

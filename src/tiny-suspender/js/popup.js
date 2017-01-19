@@ -34,7 +34,7 @@ class TinySuspenderPopup {
   }
 
   initQuickSettings() {
-    this.chrome.storage.sync.get(['idleTimeMinutes', 'enable_tab_discard'], (items) => {
+    this.chrome.storage.sync.get(['idleTimeMinutes', 'enable_tab_discard', 'dark_mode'], (items) => {
       this.idleTimeMinutes = parseInt(items.idleTimeMinutes);
       if (isNaN(this.idleTimeMinutes)) {
         this.idleTimeMinutes = 30;
@@ -51,6 +51,12 @@ class TinySuspenderPopup {
         tabDiscardElement.classList.add('red');
     
         document.querySelector('#bottom_status_container').appendChild(tabDiscardElement);
+      }
+
+      // enable dark mode
+      this.darkMode = items.dark_mode;
+      if(this.darkMode) {
+        document.body.classList.add('dark-mode');
       }
     });
   }
