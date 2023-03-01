@@ -46,6 +46,7 @@
     "storage",
     "alarms"
   ],
+  "incognito": "split",
   "commands": {
     "suspend-active-tab": {
       "suggested_key": {
