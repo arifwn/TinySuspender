@@ -94,8 +94,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'none';
       setColor();
     }
@@ -108,8 +106,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'block';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'block';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('blue');
     }
@@ -122,8 +118,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -136,8 +130,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -150,8 +142,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -164,8 +154,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -178,8 +166,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -192,8 +178,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'block';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -206,23 +190,7 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'none';
-      setColor('yellow');
-    }
-    else if (state === 'suspendable:domain_whitelist') {
-      statusText = 'This domain will not be suspended automatically for now.';
-      document.querySelector('.suspend-btn').style.display = 'block';
-      document.querySelector('.suspend-all-btn').style.display = 'block';
-      document.querySelector('.suspend-others-btn').style.display = 'block';
-      document.querySelector('.restore-btn').style.display = 'none';
-      document.querySelector('.restore-all-btn').style.display = 'block';
-      document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'block';
-      document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
     else if (state === 'nonsuspenable:temporary_disabled') {
@@ -234,8 +202,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
@@ -260,8 +226,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'none';
       setColor('gray');
     }
@@ -274,8 +238,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('red');
     }
@@ -288,8 +250,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('red');
     }
@@ -302,8 +262,6 @@ class TinySuspenderPopup {
       document.querySelector('.restore-all-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
-      document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
-      document.querySelector('.enable-tab-auto-suspend-domain-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('red');
     }
@@ -326,9 +284,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_suspend_tab", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -339,9 +295,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -352,9 +306,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -365,9 +317,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -378,9 +328,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -391,9 +339,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_tab_disable_auto_suspension", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -404,9 +350,7 @@ class TinySuspenderPopup {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
       });
-      setTimeout(() => {
-        window.close();
-      }, 100);
+      window.close();
     });
   }
 
@@ -426,9 +370,7 @@ class TinySuspenderPopup {
 
           whitelist = `${whitelist}\n${pageUrl}`;
           this.chrome.storage.sync.set({'whitelist': whitelist}, () => {
-            setTimeout(() => {
-              window.close();
-            }, 100);
+            window.close();
           });
         });
       });
@@ -437,7 +379,8 @@ class TinySuspenderPopup {
 
   onSettings(e) {
     this.log('onSettings');
-    chrome.runtime.openOptionsPage();
+    window.open(chrome.extension.getURL('settings.html'));
+    window.close();
   }
 
   onQuickSettingsChanged(e) {

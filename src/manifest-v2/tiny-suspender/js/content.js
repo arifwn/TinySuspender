@@ -39,7 +39,6 @@ class TinySuspenderContent {
   }
 
   eventHandler(request, sender, sendResponse) {
-    console.log('onmessage', request.command);
     if (request.command && request.command.startsWith('ts_')) {
       let command = request.command.substr(3);
       if (this[command]) {
@@ -68,20 +67,16 @@ class TinySuspenderContent {
 
   get_tab_scroll(request, sender, sendResponse) {
     let scrollPosition = {
-      x: window.scrollX,
-      y: window.scrollY
+      x: document.body.scrollLeft,
+      y: document.body.scrollTop
     };
-
-    console.log('get_tab_scroll', scrollPosition)
 
     sendResponse({scroll: scrollPosition});
   }
 
   set_tab_scroll(request, sender, sendResponse) {
     let scroll = request.scroll;
-    setTimeout(() => {
-      window.scrollTo(scroll.x, scroll.y);
-    }, 100);
+    window.scrollTo(scroll.x, scroll.y);
   }
 }
 

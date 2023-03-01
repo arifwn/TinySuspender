@@ -211,10 +211,7 @@ class TinySuspenderCore {
     else if (state === 'suspendable:tab_whitelist') {
       this.setIconState('yellow', tabId);
     }
-    else if (state === 'suspendable:url_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:domain_whitelist') {
+    else if (state === 'suspendable:tab_whitelist') {
       this.setIconState('yellow', tabId);
     }
     else if (state === 'nonsuspenable:temporary_disabled') {
@@ -527,16 +524,14 @@ class TinySuspenderCore {
 
   onPluginInstalled() {
     // Create one test item for each context type.
-    var contexts = [
-      ["page", "Suspend Tab"],
-      ["link", "Open link in new suspended tab"]];
+    var contexts = ["all"];
     for (var i = 0; i < contexts.length; i++) {
-      var context = contexts[i][0];
-      var title = contexts[i][1];
+      var context = contexts[i];
+      var title = "Suspend Tab";
       var id = this.chrome.contextMenus.create({
         "title": title,
         "contexts":[context],
-        "id": "context-" + context
+        "id": "context" + context
       });
     }
   }
@@ -550,18 +545,7 @@ class TinySuspenderCore {
   }
 
   onContextMenuClickHandler(info, tab) {
-    console.log('context', info)
-    if (info.menuItemId === 'context-link') {
-      this.chrome.tabs.create({
-        active: false,
-        url: 'suspend.html?url=' + encodeURIComponent(info.linkUrl)
-        + '&title=' + encodeURIComponent(info.linkUrl)
-        + '&dark_mode=' + encodeURIComponent(this.darkMode)
-      });
-    }
-    else {
-      this.suspendTab(tab.id);
-    }
+    this.suspendTab(tab.id);
   };
 
   onCommand(command) {
