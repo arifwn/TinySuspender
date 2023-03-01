@@ -33,6 +33,7 @@
         "settings.html",
         "css/*",
         "js/*",
+        "img/*/*",
         "img/*"
       ],
       "matches": ["<all_urls>"]

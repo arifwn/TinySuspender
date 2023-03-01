@@ -42,11 +42,12 @@ class TinySuspenderContent {
     if (request.command && request.command.startsWith('ts_')) {
       let command = request.command.substr(3);
       if (this[command]) {
-        return (this[command])(request, sender, sendResponse);
+        (this[command])(request, sender, sendResponse);
       }
     }
-
-    this.log('unhandled event:', request, sender);
+    else {
+      this.log('unhandled event:', request, sender);
+    }
   }
 
   formDataChanged() {
@@ -70,8 +71,6 @@ class TinySuspenderContent {
       x: window.scrollX,
       y: window.scrollY
     };
-
-    console.log('get_tab_scroll', scrollPosition)
 
     sendResponse({scroll: scrollPosition});
   }

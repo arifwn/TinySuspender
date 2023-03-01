@@ -395,8 +395,11 @@ class TinySuspenderPopup {
         this.chrome.runtime.sendMessage({command: "ts_tab_disable_auto_suspension", tabId: tab.id});
       });
       setTimeout(() => {
-        window.close();
+        this.getTabState();
       }, 100);
+      setTimeout(() => {
+        window.close();
+      }, 200);
     });
   }
 
@@ -408,8 +411,11 @@ class TinySuspenderPopup {
         this.chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
       });
       setTimeout(() => {
-        window.close();
+        this.getTabState();
       }, 100);
+      setTimeout(() => {
+        window.close();
+      }, 200);
     });
   }
 
@@ -422,8 +428,11 @@ class TinySuspenderPopup {
         this.chrome.runtime.sendMessage({command: "ts_disable_auto_suspension_domain", domain: url.hostname});
       });
       setTimeout(() => {
-        window.close();
+        this.getTabState();
       }, 100);
+      setTimeout(() => {
+        window.close();
+      }, 200);
     });
   }
 
@@ -436,8 +445,11 @@ class TinySuspenderPopup {
         this.chrome.runtime.sendMessage({command: "ts_enable_auto_suspension_domain", domain: url.hostname});
       });
       setTimeout(() => {
-        window.close();
+        this.getTabState();
       }, 100);
+      setTimeout(() => {
+        window.close();
+      }, 200);
     });
   }
 

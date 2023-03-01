@@ -28,19 +28,27 @@ class TinySuspenderCore {
   }
 
   saveState() {
-    this.chrome.storage.sync.set({'tabState': this.tabState}, () => {
+    this.chrome.storage.sync.set({'tabState': this.tabState, 'excludedDomains': this.excludedDomains}, () => {
       this.log('state saved');
     });
   }
 
   loadState() {
-    this.chrome.storage.sync.get(['tabState'], (items) => {
+    this.chrome.storage.sync.get(['tabState', 'excludedDomains'], (items) => {
       var tabState = items.tabState;
       if (!tabState) {
         this.tabState = {};
       }
       else {
         this.tabState = tabState;
+      }
+
+      var excludedDomains = items.excludedDomains;
+      if (!excludedDomains) {
+        this.excludedDomains = {};
+      }
+      else {
+        this.excludedDomains = excludedDomains;
       }
 
       this.trimState();
@@ -183,14 +191,14 @@ class TinySuspenderCore {
     }
 
     let param = {
-      path: `img/browser-icons/${icon}`
+      path: `chrome-extension://${this.chrome.runtime.id}/img/browser-icons/${icon}`
     }
 
     if (tabId) {
       param.tabId = tabId;
     }
-
-    this.chrome.browserAction.setIcon(param);
+  
+    this.chrome.action.setIcon(param);
   }
 
   setIconFromStateString(state, tabId) {
@@ -243,30 +251,36 @@ class TinySuspenderCore {
           return;
         }
 
-        let url = new URL(tab.url);
+        try {
+          let url = new URL(tab.url);
 
-        if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
-          resolve({state: 'suspended:suspended'});
-          return;
-        }
+          if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
+            resolve({state: 'suspended:suspended'});
+            return;
+          }
 
-        if (tab.discarded) {
-          resolve({state: 'nonsuspenable:discarded'});
-          return;
-        }
+          if (tab.discarded) {
+            resolve({state: 'nonsuspenable:discarded'});
+            return;
+          }
 
-        if (url && url.protocol === 'chrome-extension:') {
+          if (url && url.protocol === 'chrome-extension:') {
+            resolve({state: 'nonsuspenable:system_page'});
+            return;
+          }
+
+          if (url && url.protocol === 'chrome:') {
+            resolve({state: 'nonsuspenable:system_page'});
+            return;
+          }
+
+          if (this.excludedDomains[url.hostname]) {
+            resolve({state: 'suspendable:domain_whitelist'});
+            return;
+          }
+        } catch (error) {
+          console.log(error);
           resolve({state: 'nonsuspenable:system_page'});
-          return;
-        }
-
-        if (url && url.protocol === 'chrome:') {
-          resolve({state: 'nonsuspenable:system_page'});
-          return;
-        }
-
-        if (this.excludedDomains[url.hostname]) {
-          resolve({state: 'suspendable:domain_whitelist'});
           return;
         }
 
@@ -281,56 +295,64 @@ class TinySuspenderCore {
 
         // ask content script for current state
         // Content script may prevent autosuspension if the user has unsaved form data
-        this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_state'}, (response) => {
-          let state = 'suspendable:auto';
-          if (this.idleTimeMinutes == 0) {
-            state = 'suspendable:auto_disabled';
-          }
-
-          if (response && response.state) {
-            state = response.state;
-          }
-
-          if (state === 'suspendable:auto' && this.skipAudible && tab.audible) {
-            state = 'suspendable:audible';
-          }
-
-          if (state === 'suspendable:auto' && this.skipPinned && tab.pinned) {
-            state = 'suspendable:pinned';
-          }
-
-          if (state === 'suspendable:auto' && this.skipWhenOffline && (!navigator.onLine)) {
-            state = 'suspendable:offline';
-          }
-
-          // ignore form changes when native tab discard in enabled.
-          // native tab discard should be able to persist form data
-
-          if (this.enableTabDiscard && (state == 'suspendable:form_changed')) {
-            state = 'suspendable:auto';
-          }
-
-          // check this.tabState and whitelist to determine final state
-          let storedState = this.tabState[tabId];
-
-          if (storedState && (state != 'suspendable:form_changed')) {
-            state = storedState.state;
-          }
-
-          // check whitelist
-
-          for (let i = 0; i < this.whitelist.length; i++) {
-            let pattern = this.whitelist[i];
-            if (this.isMatch(pattern, tab.url)) {
-              state = 'suspendable:url_whitelist';
+        const getTabState = (tabId, tab, resolve) => {
+          this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_state'}, (response) => {
+            console.log('>> ts_get_tab_state', response);
+            if (chrome.runtime.lastError) {
+              // console.log('chrome.runtime.lastError', tab.title, chrome.runtime.lastError)
             }
-          }
+
+            let state = 'suspendable:auto';
+            if (this.idleTimeMinutes == 0) {
+              state = 'suspendable:auto_disabled';
+            }
+
+            if (response && response.state) {
+              state = response.state;
+            }
+
+            if (state === 'suspendable:auto' && this.skipAudible && tab.audible) {
+              state = 'suspendable:audible';
+            }
+
+            if (state === 'suspendable:auto' && this.skipPinned && tab.pinned) {
+              state = 'suspendable:pinned';
+            }
+
+            if (state === 'suspendable:auto' && this.skipWhenOffline && (!navigator.onLine)) {
+              state = 'suspendable:offline';
+            }
+
+            // ignore form changes when native tab discard in enabled.
+            // native tab discard should be able to persist form data
+
+            if (this.enableTabDiscard && (state == 'suspendable:form_changed')) {
+              state = 'suspendable:auto';
+            }
+
+            // check this.tabState and whitelist to determine final state
+            let storedState = this.tabState[tabId];
+
+            if (storedState && (state != 'suspendable:form_changed')) {
+              state = storedState.state;
+            }
+
+            // check whitelist
+
+            for (let i = 0; i < this.whitelist.length; i++) {
+              let pattern = this.whitelist[i];
+              if (this.isMatch(pattern, tab.url)) {
+                state = 'suspendable:url_whitelist';
+              }
+            }
 
 
-          answered = true;
-          clearTimeout(timer);
-          resolve({state: state});
-        });
+            answered = true;
+            clearTimeout(timer);
+            resolve({state: state});
+          });
+        }
+        getTabState(tabId, tab, resolve);
 
       });
 
