@@ -25,6 +25,9 @@ class TinySuspenderPopup {
     document.querySelector('.disable-tab-auto-suspend-btn').onclick = this.onDisableAutoSuspensionThisTab.bind(this);
     document.querySelector('.enable-tab-auto-suspend-btn').onclick = this.onEnableAutoSuspensionThisTab.bind(this);
 
+    document.querySelector('.disable-tab-auto-suspend-domain-btn').onclick = this.onDisableAutoSuspensionThisDomain.bind(this);
+    document.querySelector('.enable-tab-auto-suspend-domain-btn').onclick = this.onEnableAutoSuspensionThisDomain.bind(this);
+
     document.querySelector('.add-to-whitelist-btn').onclick = this.onAddPageToWhitelist.bind(this);
 
     document.querySelector('.settings-btn').onclick = this.onSettings.bind(this);
@@ -403,6 +406,34 @@ class TinySuspenderPopup {
     this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_tab_enable_auto_suspension", tabId: tab.id});
+      });
+      setTimeout(() => {
+        window.close();
+      }, 100);
+    });
+  }
+
+  onDisableAutoSuspensionThisDomain(e) {
+    this.log('onDisableAutoSuspensionThisDomain');
+
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        let url = new URL(tab.url);
+        this.chrome.runtime.sendMessage({command: "ts_disable_auto_suspension_domain", domain: url.hostname});
+      });
+      setTimeout(() => {
+        window.close();
+      }, 100);
+    });
+  }
+
+  onEnableAutoSuspensionThisDomain(e) {
+    this.log('onEnableAutoSuspensionThisDomain');
+
+    this.chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        let url = new URL(tab.url);
+        this.chrome.runtime.sendMessage({command: "ts_enable_auto_suspension_domain", domain: url.hostname});
       });
       setTimeout(() => {
         window.close();

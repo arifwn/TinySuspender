@@ -9,6 +9,7 @@ class TinySuspenderCore {
     // e.g. don't suspend this tab for one hour, don't suspend for now, etc
     this.tabState = {};
     this.tabScrolls = {};
+    this.excludedDomains = {};
 
     this.idleTimeMinutes = 30;
     this.whitelist = [];
@@ -261,6 +262,11 @@ class TinySuspenderCore {
 
         if (url && url.protocol === 'chrome:') {
           resolve({state: 'nonsuspenable:system_page'});
+          return;
+        }
+
+        if (this.excludedDomains[url.hostname]) {
+          resolve({state: 'suspendable:domain_whitelist'});
           return;
         }
 
@@ -682,6 +688,18 @@ class TinySuspenderCore {
   tab_enable_auto_suspension(request, sender, sendResponse) {
     if (this.tabState[request.tabId]) {
       delete this.tabState[request.tabId];
+    }
+  }
+
+  disable_auto_suspension_domain(request, sender, sendResponse) {
+    console.log('disable_auto_suspension_domain', request.domain)
+    this.excludedDomains[request.domain] = true;
+  }
+
+  enable_auto_suspension_domain(request, sender, sendResponse) {
+    console.log('enable_auto_suspension_domain', request.domain)
+    if (this.excludedDomains[request.domain]) {
+      delete this.excludedDomains[request.domain];
     }
   }
 

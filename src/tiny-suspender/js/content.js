@@ -39,7 +39,6 @@ class TinySuspenderContent {
   }
 
   eventHandler(request, sender, sendResponse) {
-    console.log('onmessage', request.command);
     if (request.command && request.command.startsWith('ts_')) {
       let command = request.command.substr(3);
       if (this[command]) {
