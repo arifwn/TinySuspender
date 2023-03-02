@@ -116,4 +116,6 @@ IPC Commands (Content Script)
     - `scroll`: e.g. `{x: 0, y: 0}`
 
 
-
+TODO
+----
+- when restoring youtube page, resume the video to a specific time by appending `?t=<seconds>` parameter

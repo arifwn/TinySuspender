@@ -52,7 +52,7 @@ class TinySuspenderCore {
       }
 
       this.trimState();
-      this.log('state loaded', this.tabState);
+      this.log('state loaded', this.tabState, this.excludedDomains);
     });
   }
 
