@@ -28,13 +28,13 @@ class TinySuspenderCore {
   }
 
   saveState() {
-    this.chrome.storage.sync.set({'tabState': this.tabState, 'excludedDomains': this.excludedDomains}, () => {
+    this.chrome.storage.local.set({'tabState': this.tabState, 'excludedDomains': this.excludedDomains}, () => {
       this.log('state saved');
     });
   }
 
   loadState() {
-    this.chrome.storage.sync.get(['tabState', 'excludedDomains'], (items) => {
+    this.chrome.storage.local.get(['tabState', 'excludedDomains'], (items) => {
       var tabState = items.tabState;
       if (!tabState) {
         this.tabState = {};
@@ -72,13 +72,13 @@ class TinySuspenderCore {
         }
       }
     });
+    this.saveState();
   }
 
   setChrome(chrome) {
     this.chrome = chrome;
     this.chrome.runtime.onMessage.addListener(this.eventHandler.bind(this));
     this.loadState();
-    this.chrome.runtime.onSuspend.addListener(this.saveState.bind(this));
 
     this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
@@ -705,23 +705,27 @@ class TinySuspenderCore {
       state: 'suspendable:tab_whitelist'
     }
     this.tabState[request.tabId] = state;
+    this.saveState();
   }
 
   tab_enable_auto_suspension(request, sender, sendResponse) {
     if (this.tabState[request.tabId]) {
       delete this.tabState[request.tabId];
+      this.saveState();
     }
   }
 
   disable_auto_suspension_domain(request, sender, sendResponse) {
     console.log('disable_auto_suspension_domain', request.domain)
     this.excludedDomains[request.domain] = true;
+    this.saveState();
   }
 
   enable_auto_suspension_domain(request, sender, sendResponse) {
     console.log('enable_auto_suspension_domain', request.domain)
     if (this.excludedDomains[request.domain]) {
       delete this.excludedDomains[request.domain];
+      this.saveState();
     }
   }
 
