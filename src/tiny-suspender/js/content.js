@@ -52,7 +52,7 @@ class TinySuspenderContent {
 
   formDataChanged() {
     this.formUpdated = true;
-    this.chrome.runtime.sendMessage({command: "ts_update_tab_state", state: this.get_current_state()}, (response) => {
+    this.chrome.runtime.sendMessage({command: "ts_update_tab_icon", state: this.get_current_state()}, (response) => {
       
     });
   }

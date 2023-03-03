@@ -78,7 +78,9 @@ class TinySuspenderCore {
   setChrome(chrome) {
     this.chrome = chrome;
     this.chrome.runtime.onMessage.addListener(this.eventHandler.bind(this));
+    
     this.loadState();
+    this.chrome.runtime.onSuspend.addListener(this.saveState.bind(this));
 
     this.chrome.tabs.onUpdated.addListener(this.onTabUpdated.bind(this));
     this.chrome.tabs.onActivated.addListener(this.onTabActivated.bind(this));
@@ -700,11 +702,8 @@ class TinySuspenderCore {
     }
   }
 
-  update_tab_state(request, sender, sendResponse) {
+  update_tab_icon(request, sender, sendResponse) {
     if (sender.tab) {
-      if (request.state === 'suspendable:auto') delete this.tabState[sender.tab.id];
-      else this.tabState[sender.tab.id] = request.state;
-
       this.setIconFromStateString(request.state, sender.tab.id);
       sendResponse(request.state);
     }
