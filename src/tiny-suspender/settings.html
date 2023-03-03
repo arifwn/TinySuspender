@@ -64,6 +64,7 @@
           <ul>
             <li>Native tab discard could potentially reclaims higher amount of memory compared to Tiny Suspender's own tab suspension procedure.</li>
             <li>Tab state will be preserved. Your scrolling position, filled form, etc. won't be lost when the tab restored. Although some users report issues under specific circumstances, it seems to works ok for typical usage.</li>
+            <li>Uninstalling extension will not close currently suspended tabs.</li>
           </ul>
 
           <p>Limitations:</p>
@@ -75,6 +76,7 @@
               <li>Also the <em>"Restore All Suspended Tabs"</em> function will not be available.</li>
             </ul>
             <li>When your browser is restarted (due to updates, crash, etc), all suspended tabs will be restored automatically. This will result in very high memory consumption if you have a lot of suspended tabs before the restart happened.</li>
+            <li>Uninstalling extension will close all currently suspended tabs.</li>
           </ul>
         </div>
       </div>
@@ -82,6 +84,12 @@
 
       <button type="submit">Save</button>
       <small id="message2"></small>
+
+
+      <div class="separator"></div>
+
+      <h2>Uninstalling Extension</h2>
+      <p>Warning: uninstalling this extension will close ALL currently suspended tabs, unless Native Tab Discard API is enabled. Make sure to restore all suspended tabs before uninstalling this extension.</p>
     </form>
   </div>
   <script type="text/javascript" src="js/settings.js"></script>
