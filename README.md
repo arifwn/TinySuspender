@@ -11,8 +11,9 @@ Available on Chrome Web Store: https://chrome.google.com/webstore/detail/tiny-su
   grouped within a single process, significantly reducing memory and cpu usage.
 - Form changes detection to prevent losing edit data on unsubmitted forms.
 - Whitelisting to prevent specific site/pages from getting suspended. Regex is supported.
-- Temporarily disable automatic suspension on a specific tabs.
+- Temporarily disable automatic suspension on a specific tabs or domains.
 - Optional automatic restore when suspended tabs brought to foreground.
+- Open new tab in new suspended tab.
 
 
 ## Screenshots
