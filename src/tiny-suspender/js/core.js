@@ -700,6 +700,16 @@ class TinySuspenderCore {
     }
   }
 
+  update_tab_state(request, sender, sendResponse) {
+    if (sender.tab) {
+      if (request.state === 'suspendable:auto') delete this.tabState[sender.tab.id];
+      else this.tabState[sender.tab.id] = request.state;
+
+      this.setIconFromStateString(request.state, sender.tab.id);
+      sendResponse(request.state);
+    }
+  }
+
   tab_disable_auto_suspension(request, sender, sendResponse) {
     let state = {
       state: 'suspendable:tab_whitelist'

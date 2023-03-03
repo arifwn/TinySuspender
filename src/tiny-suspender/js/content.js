@@ -52,18 +52,24 @@ class TinySuspenderContent {
 
   formDataChanged() {
     this.formUpdated = true;
+    this.chrome.runtime.sendMessage({command: "ts_update_tab_state", state: this.get_current_state()}, (response) => {
+      
+    });
+  }
+
+  get_current_state() {
+    if (document.querySelector('body').getAttribute('data-suspended') === 'true' ) {
+      return 'suspended:suspended';
+    }
+    else if (this.formUpdated) {
+      return 'suspendable:form_changed';
+    }
+    
+    return 'suspendable:auto';
   }
 
   get_tab_state(request, sender, sendResponse) {
-    if (document.querySelector('body').getAttribute('data-suspended') === 'true' ) {
-      sendResponse({state: 'suspended:suspended'});
-    }
-    else if (this.formUpdated) {
-      sendResponse({state: 'suspendable:form_changed'});
-    }
-    else {
-      sendResponse({state: 'suspendable:auto'});
-    }
+    sendResponse({state: this.get_current_state()});
   }
 
   get_tab_scroll(request, sender, sendResponse) {
