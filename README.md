@@ -13,7 +13,7 @@ Available on Chrome Web Store: https://chrome.google.com/webstore/detail/tiny-su
 - Whitelisting to prevent specific site/pages from getting suspended. Regex is supported.
 - Temporarily disable automatic suspension on a specific tabs or domains.
 - Optional automatic restore when suspended tabs brought to foreground.
-- Open new tab in new suspended tab.
+- Open links in new suspended tab.
 
 
 ## Screenshots
