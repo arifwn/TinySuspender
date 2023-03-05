@@ -4,9 +4,9 @@ Tiny Suspender will automatically suspend/hibernate background tabs for you, gre
 
 Features:
 
-- Form Detection: Tiny Suspender will try to detect active form to avoid automatically suspending page with unsubmitted form
+- Form Detection: Tiny Suspender will try to detect active forms to avoid automatically suspending page with unsubmitted data
 
-- Audio Detection (optional): prevent autosuspending tab that plays music in the background.
+- Audio Detection (optional): prevent autosuspending tabs that play music in the background.
 
 - Snooze: Temporarily prevent autosuspension on a specific tab or domain
 
@@ -14,11 +14,11 @@ Features:
 
 - Keyboard Shortcuts: Suspend tabs without moving your hand away from your keyboard.
 
-- Dark Mode theme (optional)
-
 - Optionally use Chrome's native tab discard feature to save even more resources when your background tabs get suspended.
 
-- Allow opening link in a new suspended tab
+- Allow opening links in a new suspended tab
+
+- Dark Mode theme (optional)
 
 Feedback is always welcome!
 - Source code and issue tracking are available at https://github.com/arifwn/TinySuspender
@@ -41,7 +41,7 @@ Chrome Permissions used in this extension:
 --------------------------------
 
 Changelog:
-- v2.0.1:
+- v2.0.2:
     - Manifest v3 support
     - Added support to temporarily whitelist a domain from suspension
     - Added Incognito Mode support
