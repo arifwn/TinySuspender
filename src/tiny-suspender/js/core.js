@@ -556,19 +556,21 @@ class TinySuspenderCore {
   // event handlers:
 
   onPluginInstalled() {
-    // Create one test item for each context type.
-    var contexts = [
-      ["page", "Suspend Tab"],
-      ["link", "Open link in new suspended tab"]];
-    for (var i = 0; i < contexts.length; i++) {
-      var context = contexts[i][0];
-      var title = contexts[i][1];
-      var id = this.chrome.contextMenus.create({
-        "title": title,
-        "contexts":[context],
-        "id": "context-" + context
-      });
-    }
+    this.chrome.contextMenus.removeAll(() => {
+      // Create one test item for each context type.
+      var contexts = [
+        ["page", "Suspend Tab"],
+        ["link", "Open link in new suspended tab"]];
+      for (var i = 0; i < contexts.length; i++) {
+        var context = contexts[i][0];
+        var title = contexts[i][1];
+        var id = this.chrome.contextMenus.create({
+          "title": title,
+          "contexts":[context],
+          "id": "context-" + context
+        });
+      }
+    });
   }
 
   onAlarm(alarm) {
