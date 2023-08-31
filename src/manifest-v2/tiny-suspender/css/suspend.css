@@ -39,6 +39,7 @@ body {
   text-decoration: none;
   color: #fff;
   font-size: 12px;
+  overflow-wrap: anywhere;
 }
 
 .suspend-message {
