@@ -331,33 +331,21 @@ class TinySuspenderCore {
 
   getTabScroll(tabId) {
     return new Promise((resolve, reject) => {
-      let answered = false;
-  
       // Set a timeout for 500 milliseconds
       let timer = setTimeout(() => {
         // If the content script hasn't answered within the timeout, resolve the promise
-        if (!answered) {
-          resolve({x: 0, y: 0});
-        }
+        resolve({ x: 0, y: 0 });
       }, 500);
   
       // Ask content script for current state
       // Content script may prevent autosuspension if the user has unsaved form data
-      this.chrome.tabs.sendMessage(tabId, {command: 'ts_get_tab_scroll'}, {}, (response) => {
+      this.chrome.tabs.sendMessage(tabId, { command: 'ts_get_tab_scroll' }, {}, (response) => {
         // If a response is received, resolve the promise and clear the timeout
-        if (response && response.scroll) {
-          resolve(response.scroll);
-          clearTimeout(timer);
-        } else {
-          // If no response is received, resolve the promise and clear the timeout
-          resolve({x: 0, y: 0});
-          clearTimeout(timer);
-        }
-        // Set answered flag to true to indicate that a response has been received
-        answered = true;
+        clearTimeout(timer);
+        resolve(response?.scroll || { x: 0, y: 0 });
       });
     });
-  }  
+  }    
 
   isSuspendable(state) {
     if (state && state.split) {
