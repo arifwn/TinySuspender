@@ -213,6 +213,12 @@ class TinySuspenderCore {
       case 'suspendable:tab_whitelist':
         this.setIconState('yellow', tabId);
         break;
+      case 'suspendable:url_whitelist':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:domain_whitelist':
+        this.setIconState('yellow', tabId);
+        break;
       case 'nonsuspenable:temporary_disabled':
         this.setIconState('yellow', tabId);
         break;
