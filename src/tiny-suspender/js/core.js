@@ -205,45 +205,47 @@ class TinySuspenderCore {
   }
 
   setIconFromStateString(state, tabId) {
-    if (state === 'suspended:suspended') {
-      this.setIconState('normal', tabId);
-    }
-    else if (state === 'suspendable:auto') {
-      this.setIconState('green', tabId);
-    }
-    else if (state === 'suspendable:form_changed') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:audible') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:pinned') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:tab_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:url_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:domain_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'nonsuspenable:temporary_disabled') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'nonsuspenable:system_page') {
-      this.setIconState('gray', tabId);
-    }
-    else if (state === 'nonsuspenable:not_running') {
-      this.setIconState('red', tabId);
-    }
-    else if (state === 'nonsuspenable:error') {
-      this.setIconState('red', tabId);
-    }
-    else {
-      this.setIconState('red', tabId);
-    }
+    switch (state) {
+      case 'suspended:suspended':
+        this.setIconState('normal', tabId);
+        break;
+      case 'suspendable:auto':
+        this.setIconState('green', tabId);
+        break;
+      case 'suspendable:form_changed':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:audible':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:pinned':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:tab_whitelist':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:url_whitelist':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'suspendable:domain_whitelist':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'nonsuspenable:temporary_disabled':
+        this.setIconState('yellow', tabId);
+        break;
+      case 'nonsuspenable:system_page':
+        this.setIconState('gray', tabId);
+        break;
+      case 'nonsuspenable:not_running':
+        this.setIconState('red', tabId);
+        break;
+      case 'nonsuspenable:error':
+        this.setIconState('red', tabId);
+        break;
+      default:
+        this.setIconState('red', tabId);
+        break;
+    };
   }
 
   getTabState(tabId) {
