@@ -181,15 +181,15 @@ class TinySuspenderCore {
       default:
         icon = 'icon-default-38.png';
     }
-  
+
     let param = {
       path: `img/browser-icons/${icon}`
     };
-  
+
     if (tabId) {
       param.tabId = tabId;
     }
-  
+
     this.chrome.browserAction.setIcon(param);
   }
 
