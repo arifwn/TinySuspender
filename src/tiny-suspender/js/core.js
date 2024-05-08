@@ -362,7 +362,7 @@ class TinySuspenderCore {
     return promise;
   }
 
-  etTabScroll(tabId) {
+  getTabScroll(tabId) {
     return new Promise((resolve, reject) => {
       let answered = false;
   
