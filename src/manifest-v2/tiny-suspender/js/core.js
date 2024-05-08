@@ -161,34 +161,35 @@ class TinySuspenderCore {
   }
 
   setIconState(state, tabId) {
-    let icon = 'icon-default-38.png'
-    if (state == 'normal') {
-      icon = 'icon-default-38.png'
+    let icon;
+    switch (state) {
+      case 'normal':
+        icon = 'icon-default-38.png';
+        break;
+      case 'green':
+        icon = 'icon-green-38.png';
+        break;
+      case 'yellow':
+        icon = 'icon-yellow-38.png';
+        break;
+      case 'red':
+        icon = 'icon-red-38.png';
+        break;
+      case 'gray':
+        icon = 'icon-gray-38.png';
+        break;
+      default:
+        icon = 'icon-default-38.png';
     }
-    else if (state == 'green') {
-      icon = 'icon-green-38.png'
-    }
-    else if (state == 'yellow') {
-      icon = 'icon-yellow-38.png'
-    }
-    else if (state == 'red') {
-      icon = 'icon-red-38.png'
-    }
-    else if (state == 'gray') {
-      icon = 'icon-gray-38.png'
-    }
-    else {
-      icon = 'icon-default-38.png'
-    }
-
+  
     let param = {
       path: `img/browser-icons/${icon}`
-    }
-
+    };
+  
     if (tabId) {
       param.tabId = tabId;
     }
-
+  
     this.chrome.browserAction.setIcon(param);
   }
 
