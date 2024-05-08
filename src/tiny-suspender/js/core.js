@@ -205,47 +205,24 @@ class TinySuspenderCore {
   }
 
   setIconFromStateString(state, tabId) {
-    switch (state) {
-      case 'suspended:suspended':
-        this.setIconState('normal', tabId);
-        break;
-      case 'suspendable:auto':
-        this.setIconState('green', tabId);
-        break;
-      case 'suspendable:form_changed':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'suspendable:audible':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'suspendable:pinned':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'suspendable:tab_whitelist':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'suspendable:url_whitelist':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'suspendable:domain_whitelist':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'nonsuspenable:temporary_disabled':
-        this.setIconState('yellow', tabId);
-        break;
-      case 'nonsuspenable:system_page':
-        this.setIconState('gray', tabId);
-        break;
-      case 'nonsuspenable:not_running':
-        this.setIconState('red', tabId);
-        break;
-      case 'nonsuspenable:error':
-        this.setIconState('red', tabId);
-        break;
-      default:
-        this.setIconState('red', tabId);
-        break;
+    const stateToIconMap = {
+      'suspended:suspended': 'normal',
+      'suspendable:auto': 'green',
+      'suspendable:form_changed': 'yellow',
+      'suspendable:audible': 'yellow',
+      'suspendable:pinned': 'yellow',
+      'suspendable:tab_whitelist': 'yellow',
+      'suspendable:url_whitelist': 'yellow',
+      'suspendable:domain_whitelist': 'yellow',
+      'nonsuspenable:temporary_disabled': 'yellow',
+      'nonsuspenable:system_page': 'gray',
+      'nonsuspenable:not_running': 'red',
+      'nonsuspenable:error': 'red'
     };
+  
+    const iconState = stateToIconMap[state] || 'red'; // Default to 'red' for unknown states
+  
+    this.setIconState(iconState, tabId);
   }
 
   getTabState(tabId) {
