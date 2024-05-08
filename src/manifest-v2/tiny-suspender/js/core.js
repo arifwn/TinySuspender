@@ -161,26 +161,16 @@ class TinySuspenderCore {
   }
 
   setIconState(state, tabId) {
-    let icon;
-    switch (state) {
-      case 'normal':
-        icon = 'icon-default-38.png';
-        break;
-      case 'green':
-        icon = 'icon-green-38.png';
-        break;
-      case 'yellow':
-        icon = 'icon-yellow-38.png';
-        break;
-      case 'red':
-        icon = 'icon-red-38.png';
-        break;
-      case 'gray':
-        icon = 'icon-gray-38.png';
-        break;
-      default:
-        icon = 'icon-default-38.png';
-    }
+    const stateToIcon = {
+      normal: 'icon-default-38.png',
+      green: 'icon-green-38.png',
+      yellow: 'icon-yellow-38.png',
+      red: 'icon-red-38.png',
+      gray: 'icon-gray-38.png',
+    };
+
+    // Use the default icon if the state is not found in the mapping
+    const icon = stateToIcon[state] || 'icon-default-38.png';
 
     let param = {
       path: `img/browser-icons/${icon}`
