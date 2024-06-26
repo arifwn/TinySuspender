@@ -172,25 +172,16 @@ class TinySuspenderCore {
   }
 
   setIconState(state, tabId) {
-    let icon = 'icon-default-38.png'
-    if (state == 'normal') {
-      icon = 'icon-default-38.png'
-    }
-    else if (state == 'green') {
-      icon = 'icon-green-38.png'
-    }
-    else if (state == 'yellow') {
-      icon = 'icon-yellow-38.png'
-    }
-    else if (state == 'red') {
-      icon = 'icon-red-38.png'
-    }
-    else if (state == 'gray') {
-      icon = 'icon-gray-38.png'
-    }
-    else {
-      icon = 'icon-default-38.png'
-    }
+    const stateToIcon = {
+      normal: 'icon-default-38.png',
+      green: 'icon-green-38.png',
+      yellow: 'icon-yellow-38.png',
+      red: 'icon-red-38.png',
+      gray: 'icon-gray-38.png',
+    };
+
+    // Use the default icon if the state is not found in the mapping
+    const icon = stateToIcon[state] || 'icon-default-38.png';
 
     let param = {
       path: `chrome-extension://${this.chrome.runtime.id}/img/browser-icons/${icon}`
@@ -204,45 +195,24 @@ class TinySuspenderCore {
   }
 
   setIconFromStateString(state, tabId) {
-    if (state === 'suspended:suspended') {
-      this.setIconState('normal', tabId);
-    }
-    else if (state === 'suspendable:auto') {
-      this.setIconState('green', tabId);
-    }
-    else if (state === 'suspendable:form_changed') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:audible') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:pinned') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:tab_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:url_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'suspendable:domain_whitelist') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'nonsuspenable:temporary_disabled') {
-      this.setIconState('yellow', tabId);
-    }
-    else if (state === 'nonsuspenable:system_page') {
-      this.setIconState('gray', tabId);
-    }
-    else if (state === 'nonsuspenable:not_running') {
-      this.setIconState('red', tabId);
-    }
-    else if (state === 'nonsuspenable:error') {
-      this.setIconState('red', tabId);
-    }
-    else {
-      this.setIconState('red', tabId);
-    }
+    const stateToIconMap = {
+      'suspended:suspended': 'normal',
+      'suspendable:auto': 'green',
+      'suspendable:form_changed': 'yellow',
+      'suspendable:audible': 'yellow',
+      'suspendable:pinned': 'yellow',
+      'suspendable:tab_whitelist': 'yellow',
+      'suspendable:url_whitelist': 'yellow',
+      'suspendable:domain_whitelist': 'yellow',
+      'nonsuspenable:temporary_disabled': 'yellow',
+      'nonsuspenable:system_page': 'gray',
+      'nonsuspenable:not_running': 'red',
+      'nonsuspenable:error': 'red'
+    };
+  
+    const iconState = stateToIconMap[state] || 'red'; // Default to 'red' for unknown states
+  
+    this.setIconState(iconState, tabId);
   }
 
   getTabState(tabId) {
