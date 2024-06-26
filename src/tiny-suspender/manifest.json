@@ -55,8 +55,17 @@
       },
       "description": "Suspend active tab"
     },
+    "restore-all-tabs": {
+      "description": "Restore all tabs"
+    },
+    "restore-all-tabs-all-windows": {
+      "description": "Restore all tabs (all windows)"
+    },
     "suspend-all-tabs": {
       "description": "Suspend all tabs"
+    },
+    "suspend-all-tabs-all-windows": {
+      "description": "Suspend all tabs (all windows)"
     },
     "suspend-other-tabs": {
       "suggested_key": {

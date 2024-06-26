@@ -576,6 +576,14 @@ class TinySuspenderCore {
         });
       });
     }
+    if (command === 'suspend-all-tabs-all-windows') {
+      this.chrome.tabs.query({}, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.suspendTab(tabId);
+        });
+      });
+    }
     if (command === 'suspend-other-tabs') {
       this.chrome.tabs.query({ active: false, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
@@ -594,6 +602,22 @@ class TinySuspenderCore {
     }
     if (command === 'restore-other-tabs') {
       this.chrome.tabs.query({ active: false, lastFocusedWindow: true }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.restoreTab(tabId);
+        });
+      });
+    }
+    if (command === 'restore-all-tabs') {
+      this.chrome.tabs.query({ lastFocusedWindow: true }, (tabs) => {
+        tabs.forEach((tab) => {
+          let tabId = tab.id;
+          this.restoreTab(tabId);
+        });
+      });
+    }
+    if (command === 'restore-all-tabs-all-windows') {
+      this.chrome.tabs.query({}, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.restoreTab(tabId);
