@@ -561,7 +561,7 @@ class TinySuspenderCore {
 
   onCommand(command) {
     if (command === 'suspend-active-tab') {
-      this.chrome.tabs.query({ active: true }, (tabs) => {
+      this.chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.suspendTab(tabId);
@@ -569,7 +569,7 @@ class TinySuspenderCore {
       });
     }
     if (command === 'suspend-all-tabs') {
-      this.chrome.tabs.query({}, (tabs) => {
+      this.chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.suspendTab(tabId);
@@ -577,7 +577,7 @@ class TinySuspenderCore {
       });
     }
     if (command === 'suspend-other-tabs') {
-      this.chrome.tabs.query({ active: false }, (tabs) => {
+      this.chrome.tabs.query({ active: false, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.suspendTab(tabId);
@@ -585,7 +585,7 @@ class TinySuspenderCore {
       });
     }
     if (command === 'restore-active-tab') {
-      this.chrome.tabs.query({ active: true }, (tabs) => {
+      this.chrome.tabs.query({ active: true, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.restoreTab(tabId);
@@ -593,7 +593,7 @@ class TinySuspenderCore {
       });
     }
     if (command === 'restore-other-tabs') {
-      this.chrome.tabs.query({ active: false }, (tabs) => {
+      this.chrome.tabs.query({ active: false, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
           this.restoreTab(tabId);
