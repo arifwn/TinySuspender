@@ -283,12 +283,9 @@ class TinySuspenderCore {
 
           // check whitelist
 
-          for (let i = 0; i < this.whitelist.length; i++) {
-            let pattern = this.whitelist[i];
-            if (this.isMatch(pattern, tab.url)) {
-              state = 'suspendable:url_whitelist';
-            }
-          }
+          if (this.whitelist.some(pattern => this.isMatch(pattern, tab.url))) {
+            state = 'suspendable:url_whitelist';
+          }          
 
 
           answered = true;
