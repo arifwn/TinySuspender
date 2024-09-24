@@ -30,6 +30,13 @@ body {
   background: white;
 }
 
+
+li a {
+  color: #2196f3;
+  text-decoration: none;
+}
+
+
 form {
   position: relative;
   padding: 10px;
