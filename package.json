@@ -1,6 +1,6 @@
 {
   "name": "tiny-suspender",
-  "version": "0.2.0",
+  "version": "0.2.4",
   "description": "Unload / suspend / hibernate idle tabs to reduce memory and cpu usage.",
   "main": "index.js",
   "private": true,
