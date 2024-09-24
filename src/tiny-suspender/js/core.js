@@ -204,10 +204,10 @@ class TinySuspenderCore {
       'suspendable:tab_whitelist': 'yellow',
       'suspendable:url_whitelist': 'yellow',
       'suspendable:domain_whitelist': 'yellow',
-      'nonsuspenable:temporary_disabled': 'yellow',
-      'nonsuspenable:system_page': 'gray',
-      'nonsuspenable:not_running': 'red',
-      'nonsuspenable:error': 'red'
+      'nonsuspendible:temporary_disabled': 'yellow',
+      'nonsuspendible:system_page': 'gray',
+      'nonsuspendible:not_running': 'red',
+      'nonsuspendible:error': 'red'
     };
   
     const iconState = stateToIconMap[state] || 'red'; // Default to 'red' for unknown states
@@ -232,17 +232,17 @@ class TinySuspenderCore {
           }
 
           if (tab.discarded) {
-            resolve({state: 'nonsuspenable:discarded'});
+            resolve({state: 'nonsuspendible:discarded'});
             return;
           }
 
           if (url && url.protocol === 'chrome-extension:') {
-            resolve({state: 'nonsuspenable:system_page'});
+            resolve({state: 'nonsuspendible:system_page'});
             return;
           }
 
           if (url && url.protocol === 'chrome:') {
-            resolve({state: 'nonsuspenable:system_page'});
+            resolve({state: 'nonsuspendible:system_page'});
             return;
           }
 
@@ -252,7 +252,7 @@ class TinySuspenderCore {
           }
         } catch (error) {
           console.log(error);
-          resolve({state: 'nonsuspenable:system_page'});
+          resolve({state: 'nonsuspendible:system_page'});
           return;
         }
 

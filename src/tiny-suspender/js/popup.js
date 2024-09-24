@@ -228,7 +228,7 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
-    else if (state === 'nonsuspenable:temporary_disabled') {
+    else if (state === 'nonsuspendible:temporary_disabled') {
       statusText = 'This tab will not be suspended automatically for now.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
@@ -242,7 +242,7 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
-    else if (state === 'nonsuspenable:discarded') {
+    else if (state === 'nonsuspendible:discarded') {
       statusText = 'This tab is currently suspended via native tab discard.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
@@ -254,7 +254,7 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('yellow');
     }
-    else if (state === 'nonsuspenable:system_page') {
+    else if (state === 'nonsuspendible:system_page') {
       statusText = 'System page cannot be suspended.';
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
@@ -268,7 +268,7 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'none';
       setColor('gray');
     }
-    else if (state === 'nonsuspenable:not_running') {
+    else if (state === 'nonsuspendible:not_running') {
       statusText = "Content script is not running. Reload the tab to make sure it's running.";
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
@@ -282,7 +282,7 @@ class TinySuspenderPopup {
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
       setColor('red');
     }
-    else if (state === 'nonsuspenable:error') {
+    else if (state === 'nonsuspendible:error') {
       statusText = "Cannot suspend this page.";
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
