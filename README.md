@@ -27,3 +27,7 @@ Available on Chrome Web Store: https://chrome.google.com/webstore/detail/tiny-su
 ![Settings](https://raw.githubusercontent.com/arifwn/TinySuspender/master/store-assets/screenshot-4.png)
 
 ![Form Detection](https://raw.githubusercontent.com/arifwn/TinySuspender/master/store-assets/screenshot-5.png)
+
+## Notes
+
+- Manifest v2 version of Tiny Suspender is available here: https://github.com/arifwn/TinySuspender-manifest-v2 . The manfest v2 version is no longer maintained.

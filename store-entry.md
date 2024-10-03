@@ -41,6 +41,15 @@ Chrome Permissions used in this extension:
 --------------------------------
 
 Changelog:
+
+- v2.0.4:
+    - Added new keyboard shortcut actions that applied to all windows
+    - Keyboard shortcuts are now only applied to the last active window
+    - Misc. bug fixes and improvements to TinySuspender's internals
+
+- v2.0.3:
+    - Misc. bug fixes
+
 - v2.0.2:
     - Manifest v3 support
     - Added support to temporarily whitelist a domain from suspension
