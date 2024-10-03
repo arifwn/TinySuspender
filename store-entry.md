@@ -42,6 +42,9 @@ Chrome Permissions used in this extension:
 
 Changelog:
 
+- v2.1.0:
+    - Added a new command to allow suspending/restoring all tabs in all windows
+
 - v2.0.4:
     - Added new keyboard shortcut actions that applied to all windows
     - Keyboard shortcuts are now only applied to the last active window

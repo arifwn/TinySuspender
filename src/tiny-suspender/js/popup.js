@@ -18,9 +18,11 @@ class TinySuspenderPopup {
   initEventHandlers() {
     document.querySelector('.suspend-btn').onclick = this.onSuspend.bind(this);
     document.querySelector('.suspend-all-btn').onclick = this.onSuspendAll.bind(this);
+    document.querySelector('.suspend-all-windows-btn').onclick = this.onSuspendAllWindows.bind(this);
     document.querySelector('.suspend-others-btn').onclick = this.onSuspendOthers.bind(this);
     document.querySelector('.restore-btn').onclick = this.onRestore.bind(this);
     document.querySelector('.restore-all-btn').onclick = this.onRestoreAll.bind(this);
+    document.querySelector('.restore-all-windows-btn').onclick = this.onRestoreAllWindows.bind(this);
 
     document.querySelector('.disable-tab-auto-suspend-btn').onclick = this.onDisableAutoSuspensionThisTab.bind(this);
     document.querySelector('.enable-tab-auto-suspend-btn').onclick = this.onEnableAutoSuspensionThisTab.bind(this);
@@ -92,9 +94,11 @@ class TinySuspenderPopup {
       statusText = 'This tab is currently suspended.';
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'none';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'none';
       document.querySelector('.suspend-others-btn').style.display = 'none';
       document.querySelector('.restore-btn').style.display = 'block';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -106,9 +110,11 @@ class TinySuspenderPopup {
       statusText = `This tab will be suspended automatically after ${this.idleTimeMinutes} minutes in the background.`;
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'block';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'block';
@@ -120,9 +126,11 @@ class TinySuspenderPopup {
       statusText = 'This tab will not be suspended automatically since automatic suspension is disabled.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -134,9 +142,11 @@ class TinySuspenderPopup {
       statusText = 'This tab will not be suspended automatically since it may contains unsaved form data.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -148,9 +158,11 @@ class TinySuspenderPopup {
       statusText = 'Audible tab will not be suspended automatically.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -162,9 +174,11 @@ class TinySuspenderPopup {
       statusText = 'Pinned tab will not be suspended automatically.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -176,9 +190,11 @@ class TinySuspenderPopup {
       statusText = 'Network appears to be down. Tabs will not be suspended automatically.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -190,9 +206,11 @@ class TinySuspenderPopup {
       statusText = 'This tab will not be suspended automatically for now.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -204,9 +222,11 @@ class TinySuspenderPopup {
       statusText = 'This url is whitelisted and will not be suspended automatically.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -218,9 +238,11 @@ class TinySuspenderPopup {
       statusText = 'This domain will not be suspended automatically for now.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -232,9 +254,11 @@ class TinySuspenderPopup {
       statusText = 'This tab will not be suspended automatically for now.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -246,9 +270,11 @@ class TinySuspenderPopup {
       statusText = 'This tab is currently suspended via native tab discard.';
       document.querySelector('.suspend-btn').style.display = 'block';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.add-to-whitelist-btn').style.display = 'block';
@@ -258,9 +284,11 @@ class TinySuspenderPopup {
       statusText = 'System page cannot be suspended.';
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -272,9 +300,11 @@ class TinySuspenderPopup {
       statusText = "Content script is not running. Reload the tab to make sure it's running.";
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -286,9 +316,11 @@ class TinySuspenderPopup {
       statusText = "Cannot suspend this page.";
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -300,9 +332,11 @@ class TinySuspenderPopup {
       statusText = "Unknown error occurs.";
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'block';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'block';
+      document.querySelector('.restore-all-windows-btn').style.display = 'block';
       document.querySelector('.disable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.enable-tab-auto-suspend-btn').style.display = 'none';
       document.querySelector('.disable-tab-auto-suspend-domain-btn').style.display = 'none';
@@ -315,10 +349,12 @@ class TinySuspenderPopup {
     if (this.enableTabDiscard) {
       document.querySelector('.suspend-btn').style.display = 'none';
       document.querySelector('.suspend-all-btn').style.display = 'none';
+      document.querySelector('.suspend-all-windows-btn').style.display = 'none';
       document.querySelector('.suspend-others-btn').style.display = 'block';
       document.querySelector('.suspend-others-btn').text = 'Suspend all background tabs';
       document.querySelector('.restore-btn').style.display = 'none';
       document.querySelector('.restore-all-btn').style.display = 'none';
+      document.querySelector('.restore-all-windows-btn').style.display = 'none';
     }
   }
 
@@ -339,6 +375,19 @@ class TinySuspenderPopup {
     this.log('onSuspendAll');
 
     this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
+      });
+      setTimeout(() => {
+        window.close();
+      }, 100);
+    });
+  }
+
+  onSuspendAllWindows(e) {
+    this.log('onSuspendAllWindows');
+
+    this.chrome.tabs.query({}, (tabs) => {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_auto_suspend_tab", tabId: tab.id});
       });
@@ -378,6 +427,19 @@ class TinySuspenderPopup {
     this.log('onRestoreAll');
 
     this.chrome.tabs.query({ currentWindow: true }, (tabs) => {
+      tabs.forEach((tab) => {
+        this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
+      });
+      setTimeout(() => {
+        window.close();
+      }, 100);
+    });
+  }
+
+  onRestoreAllWindows(e) {
+    this.log('onRestoreAllWindows');
+
+    this.chrome.tabs.query({}, (tabs) => {
       tabs.forEach((tab) => {
         this.chrome.runtime.sendMessage({command: "ts_restore_tab", tabId: tab.id});
       });

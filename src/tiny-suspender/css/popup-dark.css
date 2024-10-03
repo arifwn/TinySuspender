@@ -55,3 +55,7 @@ body.dark-mode {
 .dark-mode .section .bottom-status.red {
   color: red;
 }
+
+.dark-mode hr {
+  border-color: #555;
+}

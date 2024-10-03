@@ -108,3 +108,7 @@ form small {
 .section .bottom-status.red {
   color: red;
 }
+
+hr {
+  border-color: #fefefe;
+}
