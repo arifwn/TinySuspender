@@ -572,7 +572,7 @@ class TinySuspenderCore {
       this.chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
-          this.suspendTab(tabId);
+          this.autoSuspendTab(tabId);
         });
       });
     }
@@ -580,7 +580,7 @@ class TinySuspenderCore {
       this.chrome.tabs.query({}, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
-          this.suspendTab(tabId);
+          this.autoSuspendTab(tabId);
         });
       });
     }
@@ -588,7 +588,7 @@ class TinySuspenderCore {
       this.chrome.tabs.query({ active: false, lastFocusedWindow: true }, (tabs) => {
         tabs.forEach((tab) => {
           let tabId = tab.id;
-          this.suspendTab(tabId);
+          this.autoSuspendTab(tabId);
         });
       });
     }

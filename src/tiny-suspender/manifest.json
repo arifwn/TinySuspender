@@ -72,7 +72,7 @@
         "default": "Ctrl+Shift+O",
         "mac": "Command+Shift+O"
       },
-      "description": "Suspend background tabs"
+      "description": "Suspend other tabs"
     },
     "restore-active-tab": {
       "suggested_key": {
@@ -86,7 +86,7 @@
         "default": "Ctrl+Shift+Y",
         "mac": "Command+Shift+Y"
       },
-      "description": "Restore background tabs"
+      "description": "Restore other tabs"
     }
   },
   "icons": {
