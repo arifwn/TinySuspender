@@ -149,6 +149,20 @@ class TinySuspenderCore {
     return promise;
   }
 
+  isSystemPage(tab) {
+    if (!tab) return true;
+    
+    return !tab.url || 
+      tab.url.startsWith('chrome://') ||
+      tab.url.startsWith('chrome-extension://') ||
+      tab.url.startsWith('edge://') ||
+      tab.url.startsWith('about:') ||
+      tab.url === '' ||
+      tab.title === 'New tab' ||
+      tab.title === 'Extensions' ||
+      tab.title === 'New Tab';
+  }
+
   isMatch(pattern, string) {
     let isRegex = false;
     if ((pattern.length > 2) && (pattern.charAt(0) == '/') && (pattern.charAt(pattern.length-1) == '/')) {
@@ -224,6 +238,12 @@ class TinySuspenderCore {
         }
 
         try {
+          // Validate URL before creating URL object
+          if (!tab.url || typeof tab.url !== 'string' || tab.url.trim() === '') {
+            resolve({state: 'nonsuspendible:system_page'});
+            return;
+          }
+
           let url = new URL(tab.url);
 
           if (url && url.protocol === 'chrome-extension:' && url.pathname === '/suspend.html') {
@@ -258,6 +278,15 @@ class TinySuspenderCore {
 
         let answered = false;
 
+        // Check if this is a system page that won't have content scripts
+        if (this.isSystemPage(tab)) {
+          // Skip content script communication for system pages
+          let state = 'nonsuspendible:system_page';
+          answered = true;
+          resolve({state: state});
+          return;
+        }
+
         // if content script did not answer within 2 seconds, return state as 'suspendable:auto'
         let timer = setTimeout(() => {
           if (!answered) {
@@ -273,7 +302,7 @@ class TinySuspenderCore {
             if (chrome.runtime.lastError) {
               // console.log('chrome.runtime.lastError', tab.title, chrome.runtime.lastError)
             }
-
+            
             let state = 'suspendable:auto';
             if (this.idleTimeMinutes == 0) {
               state = 'suspendable:auto_disabled';
@@ -331,18 +360,36 @@ class TinySuspenderCore {
 
   getTabScroll(tabId) {
     return new Promise((resolve, reject) => {
-      // Set a timeout for 500 milliseconds
-      let timer = setTimeout(() => {
-        // If the content script hasn't answered within the timeout, resolve the promise
-        resolve({ x: 0, y: 0 });
-      }, 500);
-  
-      // Ask content script for current state
-      // Content script may prevent autosuspension if the user has unsaved form data
-      this.chrome.tabs.sendMessage(tabId, { command: 'ts_get_tab_scroll' }, {}, (response) => {
-        // If a response is received, resolve the promise and clear the timeout
-        clearTimeout(timer);
-        resolve(response?.scroll || { x: 0, y: 0 });
+      // First check if this tab exists and get its info
+      this.chrome.tabs.get(tabId, (tab) => {
+        if (chrome.runtime.lastError || !tab) {
+          resolve({ x: 0, y: 0 });
+          return;
+        }
+
+        // Check if this is a system page that won't have content scripts
+        if (this.isSystemPage(tab)) {
+          // Skip content script communication for system pages
+          resolve({ x: 0, y: 0 });
+          return;
+        }
+
+        // Set a timeout for 500 milliseconds
+        let timer = setTimeout(() => {
+          // If the content script hasn't answered within the timeout, resolve the promise
+          resolve({ x: 0, y: 0 });
+        }, 500);
+    
+        // Ask content script for current scroll position
+        this.chrome.tabs.sendMessage(tabId, { command: 'ts_get_tab_scroll' }, {}, (response) => {
+          clearTimeout(timer);
+          
+          if (chrome.runtime.lastError) {
+            resolve({ x: 0, y: 0 });
+          } else {
+            resolve(response?.scroll || { x: 0, y: 0 });
+          }
+        });
       });
     });
   } 
