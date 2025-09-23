@@ -48,11 +48,23 @@ if (favIconUrl) {
   icon.setAttribute('src', favIconUrl);
   document.querySelector('.title .icon').appendChild(icon);
 
-  var link = document.createElement('link');
-  link.type = 'image/x-icon';
-  link.rel = 'shortcut icon';
-  link.href = favIconUrl;
-  document.getElementsByTagName('head')[0].appendChild(link);
+  // Create a dimmed favicon for the browser tab
+  var canvas = document.createElement("canvas");
+  var ctx = canvas.getContext("2d");
+  var img = new Image();
+  img.onload = function () {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.globalAlpha = 0.2;
+    ctx.drawImage(img, 0, 0);
+
+    var link = document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = canvas.toDataURL();
+    document.getElementsByTagName('head')[0].appendChild(link);
+  };
+  img.src = favIconUrl;
 }
 
 if (title) {
