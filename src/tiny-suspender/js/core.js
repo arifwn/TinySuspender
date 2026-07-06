@@ -467,7 +467,15 @@ class TinySuspenderCore {
   }
 
   buildSuspendUrl(tab, scroll) {
-    return 'suspend.html?url=' + encodeURIComponent(tab.url)
+    // Use an absolute chrome-extension:// URL rather than the relative
+    // 'suspend.html'. This runs in an MV3 service worker, which has no
+    // "current page" to resolve a relative URL against. Chrome 149 resolves
+    // such relative URLs against the worker's own script path (js/), turning
+    // 'suspend.html' into chrome-extension://<id>/js/suspend.html — a page
+    // that doesn't exist, so suspended tabs load blank. getURL() always
+    // points at the extension root.
+    return this.chrome.runtime.getURL('suspend.html')
+         + '?url=' + encodeURIComponent(tab.url)
          + '&title=' + encodeURIComponent(tab.title)
          + '&favIconUrl=' + encodeURIComponent(tab.favIconUrl)
          + '&scroll_x=' + encodeURIComponent(scroll.x)
@@ -575,7 +583,8 @@ class TinySuspenderCore {
     if (info.menuItemId === 'context-link') {
       this.chrome.tabs.create({
         active: false,
-        url: 'suspend.html?url=' + encodeURIComponent(info.linkUrl)
+        url: this.chrome.runtime.getURL('suspend.html')
+        + '?url=' + encodeURIComponent(info.linkUrl)
         + '&title=' + encodeURIComponent(info.linkUrl)
       });
     }

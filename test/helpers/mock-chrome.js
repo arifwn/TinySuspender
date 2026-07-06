@@ -50,6 +50,7 @@ function makeChromeMock(initial = {}) {
     runtime: {
       id: 'test-extension-id',
       lastError: null,
+      getURL: (p) => 'chrome-extension://test-extension-id/' + String(p).replace(/^\//, ''),
       onMessage:   { addListener: hubs.onMessage.addListener },
       onSuspend:   { addListener: hubs.onSuspend.addListener },
       onInstalled: { addListener: hubs.onInstalled.addListener },
