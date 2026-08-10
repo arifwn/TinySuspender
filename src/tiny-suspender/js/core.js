@@ -445,16 +445,14 @@ class TinySuspenderCore {
 
   initTimersForBackgroundTabs() {
     this.log('initTimersForBackgroundTabs');
-    this.readSettings()
-      .then((settings) => {
-        if (settings.idleTimeMinutes == 0) return;
-        // The alarm handler re-checks isAutoSuspendable when it fires, so we don't
-        // need to query each tab's state here — just ensure an alarm exists.
-        this.chrome.tabs.query({ active: false }, (tabs) => {
-          tabs.forEach((tab) => this.ensureTabAutosuspensionTimer(tab.id));
-        });
-      })
-      .catch((error) => {});
+    this.settingsReady.then((settings) => {
+      if (settings.idleTimeMinutes == 0) return;
+      // The alarm handler re-checks isAutoSuspendable when it fires, so we don't
+      // need to query each tab's state here — just ensure an alarm exists.
+      this.chrome.tabs.query({ active: false }, (tabs) => {
+        tabs.forEach((tab) => this.ensureTabAutosuspensionTimer(tab.id));
+      });
+    }).catch(() => {});
   }
 
   resetAutoSuspensionTimers() {
