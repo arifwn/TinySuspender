@@ -549,6 +549,7 @@ class TinySuspenderCore {
       // Create one test item for each context type.
       var contexts = [
         ["page", "Suspend Tab"],
+        ["tab", "Suspend Tab"],
         ["link", "Open link in new suspended tab"]];
       for (var i = 0; i < contexts.length; i++) {
         var context = contexts[i][0];
